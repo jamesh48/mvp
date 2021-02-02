@@ -1,0 +1,30 @@
+{
+  "name": "rpt26-mvp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon ./server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jamesh48/rpt26-mvp.git"
+  },
+  "author": "James Hrivnak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jamesh48/rpt26-mvp/issues"
+  },
+  "homepage": "https://github.com/jamesh48/rpt26-mvp#readme",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "backbone": "^1.4.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "request": "^2.88.2",
+    "underscore": "^1.12.0"
+  }
+}
