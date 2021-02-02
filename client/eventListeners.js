@@ -3,7 +3,7 @@ $('#authorizeRequest').on('submit', (event) => {
   event.preventDefault();
   $.ajax({
     method: 'GET',
-    url: `http://localhost:4000/authorize`,
+    url: `https://aqueous-fjord-59533.herokuapp.com/authorize`,
     // contentType: 'application/json',
     success: (data) => {
       console.log(data)

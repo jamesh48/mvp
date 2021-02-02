@@ -11,7 +11,7 @@ if (port === undefined || port === "") {
 const axios = require('axios');
 
 const corsOptions = {
-  origin: 'http://localhost:4000'
+  origin: 'https://aqueous-fjord-59533.herokuapp.com/'
 }
 app.use(cors(corsOptions));
 app.use(express.json());
