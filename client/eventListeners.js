@@ -4,7 +4,7 @@ $('#authorizeRequest').on('submit', (event) => {
   $.ajax({
     method: 'GET',
     url: `https://aqueous-fjord-59533.herokuapp.com/authorize`,
-    // contentType: 'application/json',
+    contentType: 'application/json',
     success: (data) => {
       console.log(data)
     },
