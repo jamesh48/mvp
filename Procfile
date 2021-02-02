@@ -1,1 +1,1 @@
-web: npm startH
+web: npm run startH
