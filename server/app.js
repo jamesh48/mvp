@@ -31,6 +31,9 @@ router.get('/getResults', (req, res, next) => {
     }
   });
 })
+router.get('/', (req, res, next) => {
+  res.status(200).end();
+})
 
 // router.get('/authorize', (req, res, next) => {
 //   // return axios({
