@@ -13,7 +13,7 @@ const axios = require('axios');
 const corsOptions = {
   origin: 'https://aqueous-fjord-59533.herokuapp.com/authorize'
 }
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/', router);
