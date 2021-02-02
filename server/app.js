@@ -5,7 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const returnStravaResults = require('./getStravaResults').returnStravaResults;
 let port = process.env.PORT;
-if (port === null || port === "") {
+if (port === undefined || port === "") {
   port = 8000;
 }
 const axios = require('axios');
@@ -32,20 +32,20 @@ router.get('/getResults', (req, res, next) => {
   });
 })
 
-router.get('/authorize', (req, res, next) => {
-  // return axios({
-  //   method: 'GET',
-  //   url: `https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read_all`,
-  //   headers: {
-  //     'Access-Control-Allow-Origin': true
-  //   }
-  // })
-  // .then((results) => {
-  //   results = Object.values(results);
-  //   res.status(200).send(results);
-  // })
-  res.redirect(`https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:4000/exchange_token&approval_prompt=force&scope=activity:read_all`);
-})
+// router.get('/authorize', (req, res, next) => {
+//   // return axios({
+//   //   method: 'GET',
+//   //   url: `https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read_all`,
+//   //   headers: {
+//   //     'Access-Control-Allow-Origin': true
+//   //   }
+//   // })
+//   // .then((results) => {
+//   //   results = Object.values(results);
+//   //   res.status(200).send(results);
+//   // })
+//   res.redirect(`https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:4000/exchange_token&approval_prompt=force&scope=activity:read_all`);
+// })
 
 router.post('/', (req, res, next) => {
 });
