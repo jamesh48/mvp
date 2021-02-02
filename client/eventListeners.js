@@ -1,4 +1,19 @@
 var addEventListeners = () => {
+$('#authorizeRequest').on('submit', (event) => {
+  event.preventDefault();
+  $.ajax({
+    method: 'GET',
+    url: `http://localhost:4000/authorize`,
+    // contentType: 'application/json',
+    success: (data) => {
+      console.log(data)
+    },
+    error: (err) => {
+      console.log(err);
+    }
+  })
+})
+
   $('#postRequest').on('submit', (event) => {
     event.preventDefault();
     $.ajax({
@@ -19,7 +34,7 @@ var addEventListeners = () => {
     event.preventDefault();
     $.ajax({
       method: 'GET',
-      url: 'http://127.0.0.1:4000/',
+      url: 'http://127.0.0.1:4000/getResults',
       contentType: 'application/json',
 
       success: (data) => {
@@ -34,5 +49,7 @@ var addEventListeners = () => {
       }
     })
   })
+
+
 
 }

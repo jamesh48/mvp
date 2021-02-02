@@ -5,8 +5,12 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const returnStravaResults = require('./getStravaResults').returnStravaResults;
 const port = 4000;
+const axios = require('axios');
 
-app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:4000'
+}
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/', router);
@@ -15,7 +19,7 @@ router.use((req, res, next) => {
   next();
 })
 
-router.get('/', (req, res, next) => {
+router.get('/getResults', (req, res, next) => {
   returnStravaResults((err, results) => {
     if (err) {
       res.status(404).send('error')
@@ -23,6 +27,21 @@ router.get('/', (req, res, next) => {
       res.status(200).send(results);
     }
   });
+})
+
+router.get('/authorize', (req, res, next) => {
+  // return axios({
+  //   method: 'GET',
+  //   url: `https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read_all`,
+  //   headers: {
+  //     'Access-Control-Allow-Origin': true
+  //   }
+  // })
+  // .then((results) => {
+  //   results = Object.values(results);
+  //   res.status(200).send(results);
+  // })
+  res.redirect(`https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:4000/exchange_token&approval_prompt=force&scope=activity:read_all`);
 })
 
 router.post('/', (req, res, next) => {
