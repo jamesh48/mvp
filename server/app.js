@@ -11,7 +11,7 @@ if (port === undefined || port === "") {
 const axios = require('axios');
 
 const corsOptions = {
-  origin: 'https://aqueous-fjord-59533.herokuapp.com/'
+  origin: 'https://aqueous-fjord-59533.herokuapp.com/authorize'
 }
 app.use(cors());
 app.use(express.json());
@@ -47,7 +47,8 @@ router.get('/authorize', (req, res, next) => {
 //   //   results = Object.values(results);
 //   //   res.status(200).send(results);
 //   // })
-  res.redirect(`https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:4000/exchange_token&approval_prompt=force&scope=activity:read_all`);
+res.redirect('http://www.google.com');
+  // res.redirect(`https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:4000/exchange_token&approval_prompt=force&scope=activity:read_all`);
 res.status(200).send('success')
 })
 
