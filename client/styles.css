@@ -6,6 +6,10 @@
   padding-left: 2.5%;
 }
 
+.entry-title {
+  text-decoration: underline;
+}
+
 #entry1 {
   background-color: goldenrod;
   color: white;
