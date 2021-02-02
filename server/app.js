@@ -4,7 +4,10 @@ const router = express.Router();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const returnStravaResults = require('./getStravaResults').returnStravaResults;
-const port = 4000;
+let port = process.env.PORT;
+if (port === null || port === "") {
+  port = 8000;
+}
 const axios = require('axios');
 
 const corsOptions = {
