@@ -1,4 +1,4 @@
-/* .entry {
+.entry {
   border: 1px solid black;
 }
 
@@ -8,6 +8,25 @@
 
 .entry-title {
   text-decoration: underline;
+}
+
+#button-layout {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
+#user-profile {
+  display: grid;
+  grid-template-columns: auto auto;
+  margin-bottom: 5px;
+  width: 25%;
+}
+
+
+.form-buttons > input {
+  margin: none;
+  display: inline-block;
+  width: 100%;
 }
 
 #entry1 {
@@ -23,4 +42,4 @@
 #entry3 {
   background-color: #cd7f32;
   color: white;
-} */
+}

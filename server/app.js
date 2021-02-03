@@ -1,8 +1,10 @@
+const fs = require('fs');
 const express = require('express');
 const app = express();
 const router = express.Router();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+// const auth = require('./storage.txt')
 const returnStravaResults = require('./getStravaResults').returnStravaResults;
 let port = process.env.PORT;
 if (port === undefined || port === "") {
@@ -23,30 +25,92 @@ router.use((req, res, next) => {
 })
 
 router.get('/getResults', (req, res, next) => {
-  returnStravaResults((err, results) => {
+  fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
     if (err) {
-      res.status(404).send('error')
+      console.error(err);
+      res.send(err);
     } else {
-      res.status(200).send(results);
+
+      const config = {
+        method: 'GET',
+        url: 'https://www.strava.com/api/v3/athlete/activities',
+        headers: {
+          Authorization: data,
+        },
+        params: {
+          per_page: 200
+        },
+        data: ''
+      }
+
+      returnStravaResults.returnStravaResults((err, data) => {
+        if (err) {
+          res.status(404).send(err)
+        } else {
+          res.status(200).send(data);
+        }
+      }, config);
+
     }
-  });
+  })
 })
+
 router.get('/', (req, res, next) => {
   res.status(200).end();
 })
 
-router.get('/authorize', (req, res, next) => {
-  return axios({
-    method: 'GET',
-    url: `https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read_all`,
-  })
-  .then((results) => {
-    res.status(200).send(results);
-  })
-// res.redirect('https://www.strava.com/oauth/authorize');
+router.get('/getLoggedInUser', (req, res, next) => {
+  fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const config = {
+        method: 'GET',
+        url: 'https://www.strava.com/api/v3/athlete',
+        headers: {
+          Authorization: data
+        },
+        data: '',
+        scope: 'activity:read_all'
+      }
 
-  // res.redirect(`https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:4000/exchange_token&approval_prompt=force&scope=activity:read_all`);
-res.status(200).send('success')
+      return axios(config)
+        .then((athlete) => {
+          console.log(athlete);
+          res.status(200).send(athlete.data);
+        })
+        .catch((err) => {
+          res.status(404).send(err);
+        })
+
+    }
+
+
+  })
+})
+
+router.get('/exchange_token', (req, res, next) => {
+  var authCodeFromStrava = req.query.code;
+  return axios.post(`https://www.strava.com/oauth/token`, {
+    client_id: 61039,
+    client_secret: '6fc05c73bd3bff4203650315ed04e90683b96677',
+    code: authCodeFromStrava,
+    grant_type: 'authorization_code'
+  })
+    .then((results) => {
+      return results.data.token_type + ' ' + results.data.access_token;
+    }).then((auth) => {
+      fs.writeFile('./server/storage.txt', auth, (err) => {
+        if (err) {
+          res.send(err);
+        } else {
+          res.end('success');
+        }
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
 })
 
 router.post('/', (req, res, next) => {
@@ -54,7 +118,8 @@ router.post('/', (req, res, next) => {
 
 
 app.listen(port, () => {
-  console.log(`MVP App Listening on port ${port}`)}
+  console.log(`MVP App Listening on port ${port}`)
+}
 )
 
 // To Manually Get Access Token...
