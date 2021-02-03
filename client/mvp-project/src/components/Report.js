@@ -2,7 +2,7 @@ const Report = (props) => {
   // return props.report ? props.report : null
   return (
     <div>
-      <ul class ='uls'>
+      <ul className ='uls'>
         {props.renderEntries}
       </ul>
       <ul class= 'uls' id='page-numbers'>

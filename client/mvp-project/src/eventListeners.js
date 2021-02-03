@@ -23,7 +23,7 @@ const eventListeners = {
     })
   },
 
-  getUserActivities: (event, callback) => {
+  getUserActivities: (event, sport, callback) => {
     event.preventDefault();
     $.ajax({
       method: 'GET',
@@ -33,7 +33,7 @@ const eventListeners = {
 
       success: (data) => {
         const sortedResults = sortResults(data);
-        const formatedResults = formatResults(sortedResults);
+        const formatedResults = formatResults(sortedResults, sport);
         callback(formatedResults);
       },
       error: (err) => {
@@ -47,24 +47,43 @@ const sortResults = (data) => {
   return data.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
 }
 
-const formatResults = (data) => {
- var result =
-  data.filter(entry => entry.type === 'Swim' && entry.distance !== 0).map((entry, index) => {
+const formatResults = (data, sport) => {
+  var pastTense = '';
+  if (sport === 'Walk') {
+    pastTense = 'Walked-'
+  } else if (sport === 'Swim') {
+    pastTense = 'Swam-'
+  } else if (sport === 'Run') {
+    pastTense = 'an-'
+  } else {
+    pastTense = 'traveled-'
+  }
+  return data.filter(entry => entry.type === sport && entry.distance !== 0).map((entry, index) => {
     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
-    entryStr += `<p>Distance Swam- ${entry.distance} Meters</p>`
+    entryStr += `<p>Distance ${pastTense} ${entry.distance} Meters</p>`
     entryStr += `<p>Time Elapsed- ${handleTime(entry['moving_time'])}</p>`
     entryStr += `<p>${(entry.distance / entry.moving_time).toFixed(2)} Meters per Second</p>`
     var entryDate = new Date(entry.start_date).toLocaleString();
     entryStr += `<p>At ${entryDate}</p>`
     entryStr += `</div>`
     return parse(entryStr);
-    // resultStr += entryStr;
   })
-  console.log(result.length);
-  return result;
-  // return resultStr;
 }
+
+// const formatResults = (data) => {
+//   return data.filter(entry => entry.type === 'Run' && entry.distance !== 0).map((entry, index) => {
+//     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
+//     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
+//     entryStr += `<p>Distance Ran- ${entry.distance} Meters</p>`
+//     entryStr += `<p>Time Elapsed- ${handleTime(entry['moving_time'])}</p>`
+//     entryStr += `<p>${(entry.distance / entry.moving_time).toFixed(2)} Meters per Second</p>`
+//     var entryDate = new Date(entry.start_date).toLocaleString();
+//     entryStr += `<p>At ${entryDate}</p>`
+//     entryStr += `</div>`
+//     return parse(entryStr);
+//   })
+// }
 
 const handleTime = (movingTime) => {
   return new Date(movingTime * 1000).toISOString().substr(11, 8)

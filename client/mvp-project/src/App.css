@@ -19,7 +19,10 @@
 .pagenos:hover {
   cursor: pointer;
   background-color: coral;
+}
 
+#modality {
+  text-decoration: underline;
 }
 
 .entry-title {

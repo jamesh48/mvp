@@ -11,13 +11,16 @@ class App extends React.Component {
     this.updateReport = this.updateReport.bind(this);
     this.showUserProfile = this.showUserProfile.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.setSport = this.setSport.bind(this);
 
     this.state = {
       report: null,
       profile: null,
       entries: [],
       currentPage: 1,
-      entriesPerPage: 7
+      entriesPerPage: 7,
+      sport: 'Run',
+      checked: 'checked'
     }
   }
 
@@ -27,6 +30,11 @@ class App extends React.Component {
 
   handleClick(event) {
     this.setState({currentPage: Number(event.target.id)});
+  }
+
+  setSport(event) {
+    this.setState({sport: event.target.value,
+                  checked: event.target.value === 'Run' ? 'Checked' : ''});
   }
 
   showUserProfile(userProfile) {
@@ -74,21 +82,11 @@ class App extends React.Component {
     return (
       <div>
         <Profile profile={this.state.profile} />
-        <Buttons eventListeners={eventListeners} updateReport={this.updateReport} showUserProfile={this.showUserProfile} />
+        <Buttons eventListeners={eventListeners} setSport ={this.setSport} updateReport={this.updateReport} checked={this.state.checked} sport={this.state.sport}/>
         <Report renderPageNumbers = {renderPageNumbers} renderEntries = {renderEntries} report={this.state.report} />
       </div>
 
     )
-
-
-
-    // return (
-    //   <div>
-    //     <Profile profile={this.state.profile} />
-    //     <Buttons eventListeners={eventListeners} updateReport={this.updateReport} showUserProfile={this.showUserProfile} />
-    //     <Report report={this.state.report} />
-    //   </div>
-    // )
   }
 }
 
