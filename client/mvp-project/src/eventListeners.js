@@ -2,23 +2,23 @@ import $ from "jquery";
 import parse from 'html-react-parser';
 
 const eventListeners = {
-  authorizeSubmit: (event) => {
-    event.preventDefault();
+  authorize: (event) => {
+    // event.preventDefault();
     window.open('https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all')
   },
 
   getLoggedInUser: (callback) => {
     $.ajax({
       method: 'GET',
-      // url: 'http://localhost:8000/getLoggedInUser',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+      url: 'http://localhost:8000/getLoggedInUser',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
       success: (data) => {
-        // console.log(data);
+        console.log(data);
         var formatedUser = formatUser(data);
         callback(formatedUser);
       },
       error: (err) => {
-        console.log(err);
+        eventListeners.authorize();
       }
     })
   },
@@ -27,8 +27,8 @@ const eventListeners = {
     event.preventDefault();
     $.ajax({
       method: 'GET',
-      // url: 'http://127.0.0.1:8000/getResults',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
+      url: 'http://127.0.0.1:8000/getResults',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
       contentType: 'application/json',
 
       success: (data) => {

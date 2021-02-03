@@ -28,7 +28,7 @@
 
 #button-layout {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto;
 }
 
 #user-profile {

@@ -104,7 +104,8 @@ router.get('/exchange_token', (req, res, next) => {
         if (err) {
           res.send(err);
         } else {
-          res.end('success');
+          res.redirect(`http://localhost:3000/index.html#`);
+          // res.end('success');
         }
       });
     })

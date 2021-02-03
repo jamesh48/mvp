@@ -42,6 +42,7 @@ class App extends React.Component {
 
 
   render() {
+    // https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-reactjs
     const {entries, currentPage, entriesPerPage} = this.state;
 
     const indexOfLastEntry = currentPage * entriesPerPage;
