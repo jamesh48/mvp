@@ -82,7 +82,7 @@ class App extends React.Component {
     return (
       <div>
         <Profile profile={this.state.profile} />
-        <Buttons eventListeners={eventListeners} setSport ={this.setSport} updateReport={this.updateReport} checked={this.state.checked} sport={this.state.sport}/>
+        <Buttons eventListeners={eventListeners} setSport ={this.setSport} updateReport={this.updateReport} sport={this.state.sport}/>
         <Report renderPageNumbers = {renderPageNumbers} renderEntries = {renderEntries} report={this.state.report} />
       </div>
 

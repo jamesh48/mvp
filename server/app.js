@@ -38,6 +38,7 @@ router.get('/getResults', (req, res, next) => {
           Authorization: data,
         },
         params: {
+          page: 1,
           per_page: 200
         },
         data: ''
@@ -47,7 +48,14 @@ router.get('/getResults', (req, res, next) => {
         if (err) {
           res.status(404).send(err)
         } else {
-          res.status(200).send(data);
+          config.params.page += 1;
+          returnStravaResults.returnStravaResults((err, secondData) => {
+            if (err) {
+              res.status(404).send(err);
+            } else {
+              res.status(200).send(data.concat(secondData));
+            }
+          }, config)
         }
       }, config);
 
@@ -82,10 +90,7 @@ router.get('/getLoggedInUser', (req, res, next) => {
         .catch((err) => {
           res.status(404).send(err);
         })
-
     }
-
-
   })
 })
 
