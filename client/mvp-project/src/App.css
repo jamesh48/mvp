@@ -6,6 +6,22 @@
   padding-left: 2.5%;
 }
 
+.uls {
+  list-style-type: none;
+}
+.pagenos {
+  display: inline-block;
+  border: 1px solid black;
+  padding: 5px 10px 5px 10px;
+  background-color: paleturquoise;
+}
+
+.pagenos:hover {
+  cursor: pointer;
+  background-color: coral;
+
+}
+
 .entry-title {
   text-decoration: underline;
 }

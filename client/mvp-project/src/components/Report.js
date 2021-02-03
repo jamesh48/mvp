@@ -1,7 +1,15 @@
-import parse from 'html-react-parser';
-
 const Report = (props) => {
-  return props.report ? parse(props.report) : null
-};
+  // return props.report ? props.report : null
+  return (
+    <div>
+      <ul class ='uls'>
+        {props.renderEntries}
+      </ul>
+      <ul class= 'uls' id='page-numbers'>
+        {props.renderPageNumbers}
+      </ul>
+      </div>
+        )
+        };
 
 export default Report;

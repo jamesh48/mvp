@@ -1,4 +1,5 @@
 import $ from "jquery";
+import parse from 'html-react-parser';
 
 const eventListeners = {
   authorizeSubmit: (event) => {
@@ -9,7 +10,8 @@ const eventListeners = {
   getLoggedInUser: (callback) => {
     $.ajax({
       method: 'GET',
-      url: 'http://localhost:8000/getLoggedInUser',
+      // url: 'http://localhost:8000/getLoggedInUser',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
       success: (data) => {
         // console.log(data);
         var formatedUser = formatUser(data);
@@ -25,7 +27,8 @@ const eventListeners = {
     event.preventDefault();
     $.ajax({
       method: 'GET',
-      url: 'http://127.0.0.1:8000/getResults',
+      // url: 'http://127.0.0.1:8000/getResults',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
       contentType: 'application/json',
 
       success: (data) => {
@@ -45,8 +48,8 @@ const sortResults = (data) => {
 }
 
 const formatResults = (data) => {
-  var resultStr = '';
-  data.filter(entry => entry.type === 'Swim' && entry.distance !== 0).forEach((entry, index) => {
+ var result =
+  data.filter(entry => entry.type === 'Swim' && entry.distance !== 0).map((entry, index) => {
     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
     entryStr += `<p>Distance Swam- ${entry.distance} Meters</p>`
@@ -55,9 +58,12 @@ const formatResults = (data) => {
     var entryDate = new Date(entry.start_date).toLocaleString();
     entryStr += `<p>At ${entryDate}</p>`
     entryStr += `</div>`
-    resultStr += entryStr;
+    return parse(entryStr);
+    // resultStr += entryStr;
   })
-  return resultStr;
+  console.log(result.length);
+  return result;
+  // return resultStr;
 }
 
 const handleTime = (movingTime) => {
