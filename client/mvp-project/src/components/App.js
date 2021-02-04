@@ -4,6 +4,7 @@ import Buttons from './Buttons';
 import Profile from './Profile';
 import eventListeners from '../eventListeners.js';
 import React from 'react';
+import Example from './useStateTest';
 
 class App extends React.Component {
   constructor(props) {
