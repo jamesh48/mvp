@@ -13,6 +13,7 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.setSport = this.setSport.bind(this);
     this.updateProgressBar = this.updateProgressBar.bind(this);
+    this.setDistance = this.setDistance.bind(this);
 
     this.myVar = '';
     this.state = {
@@ -24,40 +25,49 @@ class App extends React.Component {
       sport: 'Run',
       checked: 'checked',
       progressBarProgress: 0,
+      isLoaded: false,
+      distance: 0
     }
   }
 
   updateReport(report) {
-    this.setState({entries: report });
+    this.setState({ entries: report});
   }
 
   handleClick(event) {
-    this.setState({currentPage: Number(event.target.id)});
+    this.setState({ currentPage: Number(event.target.id) });
   }
 
   setSport(event) {
-    this.setState({sport: event.target.value,
-                  checked: event.target.value === 'Run' ? 'Checked' : ''});
+    this.setState({
+      sport: event.target.value,
+      checked: event.target.value === 'Run' ? 'Checked' : '',
+      distance: 0
+    });
+  }
+
+  setDistance(event) {
+    this.setState({ distance: Number(event.target.value)});
   }
 
   showUserProfile(userProfile) {
-    this.setState({ profile: userProfile })
+    this.setState({ profile: userProfile, isLoaded: true })
   }
 
   updateProgressBar(end, reset) {
     if (end) {
-      this.setState({progressBarProgress: 100})
+      this.setState({ progressBarProgress: 100 })
     } else if (this.state.progressBarProgress === 95) {
       return true;
     } else if (reset) {
-      this.setState({progressBarProgress: 0});
+      this.setState({ progressBarProgress: 0 });
     } else {
-      this.setState(prevState =>{
-        return{
-             ...prevState,
-             progressBarProgress: prevState.progressBarProgress + 1
+      this.setState(prevState => {
+        return {
+          ...prevState,
+          progressBarProgress: prevState.progressBarProgress + 1
         }
-     });
+      });
     }
   }
 
@@ -65,13 +75,12 @@ class App extends React.Component {
     document.title = 'Swim Report Generator';
     eventListeners.getLoggedInUser((user) => {
       this.showUserProfile(user);
-    });
-
+    }, this.state.isLoaded);
   }
 
   render() {
     // https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-reactjs
-    const {entries, currentPage, entriesPerPage} = this.state;
+    const { entries, currentPage, entriesPerPage } = this.state;
 
     const indexOfLastEntry = currentPage * entriesPerPage;
     const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
@@ -88,22 +97,22 @@ class App extends React.Component {
 
     const renderPageNumbers = pageNumbers.map(number => {
       return (
-      <li
-      key={number}
-      id={number}
-      onClick={this.handleClick}
-      className = 'pagenos'
-      >
-        {number}
-      </li>
+        <li
+          key={number}
+          id={number}
+          onClick={this.handleClick}
+          className='pagenos'
+        >
+          {number}
+        </li>
       )
     });
 
     return (
       <div id='body'>
         <Profile profile={this.state.profile} />
-        <Buttons eventListeners={eventListeners} setSport ={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress}/>
-        <Report renderPageNumbers = {renderPageNumbers} renderEntries = {renderEntries} report={this.state.report} />
+        <Buttons eventListeners={eventListeners} setSport={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress} distance={this.state.distance} setDistance={this.setDistance}/>
+        <Report renderPageNumbers={renderPageNumbers} renderEntries={renderEntries} report={this.state.report} />
       </div>
 
     )

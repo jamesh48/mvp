@@ -13,18 +13,20 @@ const eventListeners = {
       url: 'http://localhost:8000/getLoggedInUser',
       // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
       success: (data) => {
-        console.log(data.ytd_swim_totals);
-        console.log(data.ytd_run_totals);
         var formatedUser = formatUser(data);
         callback(formatedUser);
       },
       error: (err) => {
-        eventListeners.authorize();
+        if (err.status !== 429) {
+          eventListeners.authorize();
+        } else {
+          alert('Error 429, Rate Limited')
+        }
       }
-    })
+    });
   },
 
-  getUserActivities: (updateProgressBar, event, sport, callback) => {
+  getUserActivities: (updateProgressBar, event, sport, distance, callback) => {
     event.preventDefault();
 
     const moveProgressBar = setInterval(() => {
@@ -43,7 +45,7 @@ const eventListeners = {
         clearInterval(moveProgressBar)
         updateProgressBar('end');
         const sortedResults = sortResults(data);
-        const formatedResults = formatResults(sortedResults, sport);
+        const formatedResults = formatResults(sortedResults, sport, distance);
         callback(formatedResults);
       },
       error: (err) => {
@@ -54,7 +56,7 @@ const eventListeners = {
           updateProgressBar(null, 'reset');
         }, 500)
       }
-    })
+    });
   }
 }
 
@@ -62,7 +64,7 @@ const sortResults = (data) => {
   return data.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
 }
 
-const formatResults = (data, sport) => {
+const formatResults = (data, sport, distance) => {
   var pastTense = '';
   if (sport === 'Walk') {
     pastTense = 'Walked-'
@@ -73,14 +75,15 @@ const formatResults = (data, sport) => {
   } else {
     pastTense = 'traveled-'
   }
-  return data.filter(entry => entry.type === sport && entry.distance !== 0).map((entry, index) => {
+
+  return data.filter(entry => entry.type === sport && entry.distance !== 0 && entry.distance >= distance).map((entry, index) => {
     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
     entryStr += `<p>Distance ${pastTense} ${entry.distance} Meters</p>`
     entryStr += `<p>Time Elapsed- ${handleTime(entry['moving_time'])}</p>`
     entryStr += `<p>${(entry.distance / entry.moving_time).toFixed(2)} Meters per Second</p>`
     var entryDate = new Date(entry.start_date).toLocaleString();
-    entryStr += `<p>At ${entryDate}</p>`
+    entryStr += `<p>On ${entryDate}</p>`
     entryStr += `</div>`
     return parse(entryStr);
   })
@@ -93,14 +96,35 @@ const handleTime = (movingTime) => {
 const formatUser = (user) => {
   console.log(user.ytd_swim_totals);
   var resultStr = '<div id=user-profile>';
-  resultStr += `<img id='user-img' src='${user.profile}'/>`
-  resultStr += `<span id='user-info'>`
-  resultStr += `<p id='user-name'>${user.firstname} ${user.lastname}</p>`;
-  resultStr += `<p id='user-location'>${user.city}, ${user.state} ${user.country}</p>`
-  resultStr += `<p id='ytd_run_totals'>Year-To-Date Run Totals: ${user.ytd_run_totals.distance}</p>`
-  resultStr += `</span>`
+
+  resultStr +=
+  `<img id='user-img' src='${user.profile}'/>
+  <div id='user-info'>
+  <p id='user-name'>${user.firstname} ${user.lastname}</p>
+  <p id='user-location'>${user.city}, ${user.state} ${user.country}</p>
+  </div>`
+
+  resultStr +=
+  `<div class='ytd-totals'>
+  <h4>Year-To-Date Run Totals</h4>
+  <p>Number of Runs: ${user.ytd_run_totals.count}</p>
+  <p>Total Distance: ${user.ytd_run_totals.distance} Meters</p>
+  <p>Average Speed:
+  ${(user.ytd_run_totals.count === 0 ? 0 : (user.ytd_run_totals.distance / user.ytd_run_totals.elapsed_time).toFixed(2))} Meters per Second</p>
+  </div>`
+
+  resultStr +=
+  `<div class='ytd-totals'>
+  <h4>Year-To-Date Swim Totals</h4>
+  <p>Number of Swims: ${user.ytd_swim_totals.count}</p>
+  <p>Total Distance: ${user.ytd_swim_totals.distance} Meters</p>
+  <p>Average Speed:
+  ${(user.ytd_swim_totals.count === 0 ? 0 : (user.ytd_swim_totals.distance / user.ytd_swim_totals.elapsed_time).toFixed(2))} Meters per Second</p>
+  </div>`
 
   resultStr += '</div>'
+
+
   return resultStr;
 }
 

@@ -127,7 +127,6 @@ router.get('/getLoggedInUser', (req, res, next) => {
             })
         })
         .catch((err) => {
-          console.log(err.response.status)
           if (err.response.status === 429) {
             res.status(429).send(err);
           } else {

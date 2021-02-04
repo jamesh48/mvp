@@ -1,9 +1,25 @@
-ul {
+ul, p, h4 {
   padding: 0;
+  margin: 0;
 }
+
+h4,p {
+  margin-bottom: 5px;
+  padding: 4px;
+}
+
+#user-img {
+  border: 1px solid black;
+  border-right: none;
+}
+
 
 ul, #user-profile, .form-buttons {
  margin: 0 2.5% 0 2.5%;
+}
+
+.more-buttons {
+  display: inline-block;
 }
 .entry {
   border: 1px solid black;
@@ -29,7 +45,7 @@ ul, #user-profile, .form-buttons {
   background-color: coral;
 }
 
-#modality {
+#choose-sport, #choose-distance {
   text-decoration: underline;
 }
 
@@ -38,8 +54,8 @@ ul, #user-profile, .form-buttons {
 }
 
 #button-layout {
-  /* display: grid;
-  grid-template-columns: auto; */
+  display: grid;
+  grid-template-columns: auto auto auto auto;
 }
 
 #report {
@@ -50,11 +66,10 @@ ul, #user-profile, .form-buttons {
 
 #user-profile {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 9% 20% auto auto;
   margin-top: .5%;
   margin-bottom: 1%;
-  width: 25%;
-  border-bottom: 1px solid black;
+  width: 95%;
 }
 
 
@@ -62,7 +77,11 @@ ul, #user-profile, .form-buttons {
   margin-bottom: .5%;
   display: inline-block;
   width: 100%;
+}
 
+#user-info {
+  /* background-color: lime; */
+  border: 1px solid black;
 }
 
 #entry1 {
@@ -78,6 +97,13 @@ ul, #user-profile, .form-buttons {
 #entry3 {
   background-color: #cd7f32;
   color: white;
+}
+
+.ytd-totals {
+  /* background-color: plum; */
+  border: 1px solid black;
+  border-left: none;
+  display: inline-block;
 }
 
 /* Progress Bar */
