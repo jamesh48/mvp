@@ -19,7 +19,7 @@ class App extends React.Component {
 
     this.myVar = '';
     this.state = {
-      report: null,
+      report: [],
       profile: null,
       entries: [],
       currentPage: 1,
@@ -33,9 +33,7 @@ class App extends React.Component {
     }
   }
 
-  updateReport(report) {
-    this.setState({ entries: report});
-  }
+
 
   handleClick(event) {
     this.setState({ currentPage: Number(event.target.id) });
@@ -45,16 +43,28 @@ class App extends React.Component {
     this.setState({
       sport: event.target.value,
       checked: event.target.value === 'Run' ? 'Checked' : '',
-      distance: 0
+      distance: 0,
+      format: event.target.value === 'Run' ? 'kph' :
+      event.target.value === 'Swim' ? 'avgmpace' :
+      'kph'
     });
   }
 
   setDistance(event) {
-    this.setState({ distance: Number(event.target.value)});
+    this.setState({ distance: Number(event.target.value) });
   }
 
   setFormat(event) {
-    this.setState({format: event.target.value});
+    this.setState({ format: event.target.value });
+  }
+
+  updateReport(report) {
+    report = report.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
+    // var test = [];
+    // for (let i = 0; i < Object.keys(report).length; i++) {
+    //   test.push({});
+    // }
+    this.setState({ entries: report });
   }
 
   showUserProfile(userProfile) {
@@ -94,8 +104,10 @@ class App extends React.Component {
     const currentEntries = entries.slice(indexOfFirstEntry, indexOfLastEntry);
 
     const renderEntries = currentEntries.map((entry, index) => {
-      // return <li key={index}>{entry}</li>
-      return new Entry;
+      console.log(this.state.sport, entry.type);
+      if (this.state.sport === entry.type && this.state.distance <= entry.distance) {
+        return <li key={index}><Entry entry={entry} format={this.state.format}/></li>
+      }
     });
 
     const pageNumbers = [];
@@ -119,8 +131,9 @@ class App extends React.Component {
     return (
       <div id='body'>
         <Profile profile={this.state.profile} />
-        <Buttons eventListeners={eventListeners} setSport={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress} distance={this.state.distance} setDistance={this.setDistance} setFormat ={this.setFormat} format={this.state.format}/>
-        <Report format={this.state.format} renderPageNumbers={renderPageNumbers} renderEntries={renderEntries} report={this.state.report} />
+        <Buttons eventListeners={eventListeners} setSport={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress} distance={this.state.distance} setDistance={this.setDistance} setFormat={this.setFormat} format={this.state.format} />
+        <Report renderPageNumbers={renderPageNumbers} renderEntries={renderEntries} entries={this.state.entries} report={this.state.report}/>
+
       </div>
 
     )

@@ -1,6 +1,8 @@
 import $ from "jquery";
 import parse from 'html-react-parser';
 import config from './settings';
+import testData from './testData';
+
 
 const eventListeners = {
   authorize: (event) => {
@@ -11,18 +13,18 @@ const eventListeners = {
   getLoggedInUser: (callback) => {
     $.ajax({
       method: 'GET',
-      // url: 'http://localhost:8000/getLoggedInUser',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+      url: 'http://localhost:8000/getLoggedInUser',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
       success: (data) => {
         var formatedUser = formatUser(data);
         callback(formatedUser);
       },
       error: (err) => {
         console.log(err.status);
-        if (err.status !== 429) {
-          eventListeners.authorize();
+        if (err.status === 429) {
+          alert(`Error ${err.status}: ${err.statusText}`);
         } else {
-          alert('Error 429: Rate Limited')
+          eventListeners.authorize();
         }
       }
     });
@@ -40,31 +42,36 @@ const eventListeners = {
 
     $.ajax({
       method: 'GET',
-      // url: 'http://127.0.0.1:8000/getResults',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
+      url: 'http://127.0.0.1:8000/getResults',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
       contentType: 'application/json',
       success: (data) => {
         clearInterval(moveProgressBar)
         updateProgressBar('end');
-        const sortedResults = sortResults(data);
-        const formatedResults = formatResults(sortedResults, sport, distance, format);
-        callback(formatedResults);
+        // const sortedResults = sortResults(data);
+        // const formatedResults = formatResults(sortedResults, sport, distance, format);
+        // callback(formatedResults);
+        // callback(sortedResults);
+        callback(data);
       },
       error: (err) => {
         console.log(err);
+        clearInterval(moveProgressBar);
+        updateProgressBar('end');
+        callback(testData)
       },
       complete: () => {
         setTimeout(() => {
           updateProgressBar(null, 'reset');
-        }, 500)
+        }, 300)
       }
     });
   }
 }
 
-const sortResults = (data) => {
-  return data.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
-}
+// const sortResults = (data) => {
+//   return data.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
+// }
 
 const formatResults = (data, sport, distance, format) => {
   var pastTense = '';
@@ -77,13 +84,13 @@ const formatResults = (data, sport, distance, format) => {
   } else {
     pastTense = 'traveled-'
   }
-console.log('format->  ' + format);
+  console.log('format->  ' + format);
   return data.filter(entry => entry.type === sport && entry.distance !== 0 && entry.distance >= distance).map((entry, index) => {
     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
     entryStr += `<p>Distance ${pastTense} ${entry.distance} Meters</p>`
     entryStr += `<p>Time Elapsed- ${handleTime(entry['moving_time'])}</p>`
-      entryStr += `<p><p className='speed'> ${((entry.distance / entry.moving_time) * 3.6).toFixed(2)} </p> Kilometers per Hour</p>`
+    entryStr += `<p><p className='speed'> ${((entry.distance / entry.moving_time) * 3.6).toFixed(2)} </p> Kilometers per Hour</p>`
 
 
     var entryDate = new Date(entry.start_date).toLocaleString();
@@ -103,7 +110,7 @@ const formatUser = (user) => {
 
   // Basic Info
   resultStr +=
-  `<img id='user-img' src='${user.profile}'/>
+    `<img id='user-img' src='${user.profile}'/>
   <div id='user-info'>
   <p id='user-name'>${user.firstname} ${user.lastname}</p>
   <p id='user-location'>${user.city}, ${user.state} ${user.country}</p>
@@ -111,7 +118,7 @@ const formatUser = (user) => {
 
   // Running Totals
   resultStr +=
-  `<div class='ytd-totals'>
+    `<div class='ytd-totals'>
   <h4>Year-To-Date Run Totals</h4>
   <p>Number of Runs: ${user.ytd_run_totals.count}</p>
   <p>Total Distance: ${user.ytd_run_totals.distance} Meters</p>
@@ -121,7 +128,7 @@ const formatUser = (user) => {
 
   // Swimming Totals
   resultStr +=
-  `<div class='ytd-totals'>
+    `<div class='ytd-totals'>
   <h4>Year-To-Date Swim Totals</h4>
   <p>Number of Swims: ${user.ytd_swim_totals.count}</p>
   <p>Total Distance: ${user.ytd_swim_totals.distance} Meters</p>

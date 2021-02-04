@@ -1,15 +1,23 @@
+import Entry from './entry';
+
 const Report = (props) => {
-  // return props.report ? props.report : null
   return (
     <div id='report'>
-      <ul className ='uls'>
+      <ul className='uls'>
         {props.renderEntries}
+        {/* {props.entries.map((entry) => {
+        return <Entry entry={entry} />
+      })} */}
       </ul>
-      <ul class= 'uls' id='page-numbers'>
+      <ul class='uls' id='page-numbers'>
         {props.renderPageNumbers}
       </ul>
-      </div>
-        )
-        };
+
+
+
+    </div>
+  )
+};
 
 export default Report;
+

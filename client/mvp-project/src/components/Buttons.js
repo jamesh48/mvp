@@ -1,6 +1,7 @@
 import ProgressBar from './progressbar/progress-bar';
-import MoreButtons from './moreButtons';
-import EvenMoreButtons from './evenMoreButtons';
+import ChooseSport from './chooseSport';
+import ChooseDistance from './chooseDistance';
+import ChooseFormat from './chooseFormat';
 
 const Buttons = (props) => {
 
@@ -8,7 +9,6 @@ const Buttons = (props) => {
     <div>
       <div>
         <form className='form-buttons' onSubmit={(event) => {
-          console.log(props.distance);
           props.eventListeners.getUserActivities(props.updateProgressBar, event, props.sport, props.distance, props.format, (results) => {
             props.updateReport(results);
           });
@@ -16,17 +16,9 @@ const Buttons = (props) => {
         } id='getRequest'>
 
           <div id='button-layout'>
-            <div onChange={(event) => props.setSport(event)}>
-              <h4 id='choose-sport'>Choose Sport</h4>
-              <input type="radio" id="run" name="modality" value="Run" checked={props.checked} />
-              <label for="run">Running</label><br />
-              <input type="radio" id="swim" name="modality" value="Swim" />
-              <label for="swim">Swimming</label><br />
-              <input type="radio" id="walk" name="modality" value="Walk" />
-              <label for="walk">Walking</label><br />
-            </div>
-            <MoreButtons distance={props.distance} sport={props.sport} setDistance={props.setDistance} />
-            <EvenMoreButtons format={props.format} setFormat={props.setFormat}/>
+            <ChooseSport setSport = {props.setSport} checked={props.checked}/>
+            <ChooseDistance distance={props.distance} sport={props.sport} setDistance={props.setDistance} />
+            <ChooseFormat format={props.format} setFormat={props.setFormat} sport={props.sport}/>
             <div></div>
           </div>
 

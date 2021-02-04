@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
-
-const MoreButtons = (props) => {
+const ChooseDistance = (props) => {
   if (props.sport === 'Swim') {
     return (
-      <div className='more-buttons' onChange={(event) => props.setDistance(event)}>
+      <div className='choose-radio' onChange={(event) => props.setDistance(event)}>
         <h4 id='choose-distance'>Choose Distance</h4>
 
         <input type="radio" id="allresults" name="distance" value="0" checked={props.distance === 0 ? 'Checked' : null} />
@@ -24,7 +22,7 @@ const MoreButtons = (props) => {
     )
   } else if (props.sport === 'Run') {
     return (
-      <div className='more-buttons' onChange={(event) => props.setDistance(event)}>
+      <div className='choose-radio' onChange={(event) => props.setDistance(event)}>
         <h4 id='choose-distance'>Choose Distance</h4>
         <input type="radio" id="allresults" name="distance" value="0" checked={props.distance === 0 ? 'Checked' : null} />
         <label for="allresults">All Results</label><br />
@@ -47,4 +45,4 @@ const MoreButtons = (props) => {
   }
 }
 
-export default MoreButtons;
+export default ChooseDistance;
