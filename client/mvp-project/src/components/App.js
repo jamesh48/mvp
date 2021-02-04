@@ -72,10 +72,10 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    document.title = 'Swim Report Generator';
+    document.title = 'Strava Report Generator';
     eventListeners.getLoggedInUser((user) => {
       this.showUserProfile(user);
-    }, this.state.isLoaded);
+    });
   }
 
   render() {

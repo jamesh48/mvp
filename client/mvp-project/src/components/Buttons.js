@@ -31,7 +31,7 @@ const Buttons = (props) => {
 
           <br />
           <ProgressBar completed={props.progressBarProgress} />
-          <input type='submit' value='Get Results!'></input>
+          {props.progressBarProgress === 0 ? <input type='submit' value='Get Results!'></input> : null}
         </form>
       </div>
 

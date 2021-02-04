@@ -1,10 +1,11 @@
 import $ from "jquery";
 import parse from 'html-react-parser';
+import config from './settings';
 
 const eventListeners = {
   authorize: (event) => {
     // event.preventDefault();
-    window.open('https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all')
+    window.open(`https://www.strava.com/oauth/authorize?client_id=${config.userId}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
   },
 
   getLoggedInUser: (callback) => {
@@ -20,7 +21,7 @@ const eventListeners = {
         if (err.status !== 429) {
           eventListeners.authorize();
         } else {
-          alert('Error 429, Rate Limited')
+          alert('Error 429: Rate Limited')
         }
       }
     });
@@ -97,6 +98,7 @@ const formatUser = (user) => {
   console.log(user.ytd_swim_totals);
   var resultStr = '<div id=user-profile>';
 
+  // Basic Info
   resultStr +=
   `<img id='user-img' src='${user.profile}'/>
   <div id='user-info'>
@@ -104,6 +106,7 @@ const formatUser = (user) => {
   <p id='user-location'>${user.city}, ${user.state} ${user.country}</p>
   </div>`
 
+  // Running Totals
   resultStr +=
   `<div class='ytd-totals'>
   <h4>Year-To-Date Run Totals</h4>
@@ -113,6 +116,7 @@ const formatUser = (user) => {
   ${(user.ytd_run_totals.count === 0 ? 0 : (user.ytd_run_totals.distance / user.ytd_run_totals.elapsed_time).toFixed(2))} Meters per Second</p>
   </div>`
 
+  // Swimming Totals
   resultStr +=
   `<div class='ytd-totals'>
   <h4>Year-To-Date Swim Totals</h4>
