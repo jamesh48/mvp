@@ -1,5 +1,6 @@
 import ProgressBar from './progressbar/progress-bar';
 import MoreButtons from './moreButtons';
+import EvenMoreButtons from './evenMoreButtons';
 
 const Buttons = (props) => {
 
@@ -8,7 +9,7 @@ const Buttons = (props) => {
       <div>
         <form className='form-buttons' onSubmit={(event) => {
           console.log(props.distance);
-          props.eventListeners.getUserActivities(props.updateProgressBar, event, props.sport, props.distance, (results) => {
+          props.eventListeners.getUserActivities(props.updateProgressBar, event, props.sport, props.distance, props.format, (results) => {
             props.updateReport(results);
           });
         }
@@ -25,7 +26,7 @@ const Buttons = (props) => {
               <label for="walk">Walking</label><br />
             </div>
             <MoreButtons distance={props.distance} sport={props.sport} setDistance={props.setDistance} />
-            <div></div>
+            <EvenMoreButtons format={props.format} setFormat={props.setFormat}/>
             <div></div>
           </div>
 

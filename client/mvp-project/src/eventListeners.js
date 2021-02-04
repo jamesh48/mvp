@@ -18,6 +18,7 @@ const eventListeners = {
         callback(formatedUser);
       },
       error: (err) => {
+        console.log(err.status);
         if (err.status !== 429) {
           eventListeners.authorize();
         } else {
@@ -27,7 +28,7 @@ const eventListeners = {
     });
   },
 
-  getUserActivities: (updateProgressBar, event, sport, distance, callback) => {
+  getUserActivities: (updateProgressBar, event, sport, distance, format, callback) => {
     event.preventDefault();
 
     const moveProgressBar = setInterval(() => {
@@ -46,7 +47,7 @@ const eventListeners = {
         clearInterval(moveProgressBar)
         updateProgressBar('end');
         const sortedResults = sortResults(data);
-        const formatedResults = formatResults(sortedResults, sport, distance);
+        const formatedResults = formatResults(sortedResults, sport, distance, format);
         callback(formatedResults);
       },
       error: (err) => {
@@ -65,7 +66,7 @@ const sortResults = (data) => {
   return data.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
 }
 
-const formatResults = (data, sport, distance) => {
+const formatResults = (data, sport, distance, format) => {
   var pastTense = '';
   if (sport === 'Walk') {
     pastTense = 'Walked-'
@@ -76,13 +77,15 @@ const formatResults = (data, sport, distance) => {
   } else {
     pastTense = 'traveled-'
   }
-
+console.log('format->  ' + format);
   return data.filter(entry => entry.type === sport && entry.distance !== 0 && entry.distance >= distance).map((entry, index) => {
     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
     entryStr += `<p>Distance ${pastTense} ${entry.distance} Meters</p>`
     entryStr += `<p>Time Elapsed- ${handleTime(entry['moving_time'])}</p>`
-    entryStr += `<p>${(entry.distance / entry.moving_time).toFixed(2)} Meters per Second</p>`
+      entryStr += `<p><p className='speed'> ${((entry.distance / entry.moving_time) * 3.6).toFixed(2)} </p> Kilometers per Hour</p>`
+
+
     var entryDate = new Date(entry.start_date).toLocaleString();
     entryStr += `<p>On ${entryDate}</p>`
     entryStr += `</div>`

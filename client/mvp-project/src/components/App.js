@@ -4,7 +4,7 @@ import Buttons from './Buttons';
 import Profile from './Profile';
 import eventListeners from '../eventListeners.js';
 import React from 'react';
-import Example from './useStateTest';
+import Entry from './entry';
 
 class App extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class App extends React.Component {
     this.setSport = this.setSport.bind(this);
     this.updateProgressBar = this.updateProgressBar.bind(this);
     this.setDistance = this.setDistance.bind(this);
+    this.setFormat = this.setFormat.bind(this);
 
     this.myVar = '';
     this.state = {
@@ -27,7 +28,8 @@ class App extends React.Component {
       checked: 'checked',
       progressBarProgress: 0,
       isLoaded: false,
-      distance: 0
+      distance: 0,
+      format: 'kph'
     }
   }
 
@@ -49,6 +51,10 @@ class App extends React.Component {
 
   setDistance(event) {
     this.setState({ distance: Number(event.target.value)});
+  }
+
+  setFormat(event) {
+    this.setState({format: event.target.value});
   }
 
   showUserProfile(userProfile) {
@@ -88,7 +94,8 @@ class App extends React.Component {
     const currentEntries = entries.slice(indexOfFirstEntry, indexOfLastEntry);
 
     const renderEntries = currentEntries.map((entry, index) => {
-      return <li key={index}>{entry}</li>
+      // return <li key={index}>{entry}</li>
+      return new Entry;
     });
 
     const pageNumbers = [];
@@ -112,8 +119,8 @@ class App extends React.Component {
     return (
       <div id='body'>
         <Profile profile={this.state.profile} />
-        <Buttons eventListeners={eventListeners} setSport={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress} distance={this.state.distance} setDistance={this.setDistance}/>
-        <Report renderPageNumbers={renderPageNumbers} renderEntries={renderEntries} report={this.state.report} />
+        <Buttons eventListeners={eventListeners} setSport={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress} distance={this.state.distance} setDistance={this.setDistance} setFormat ={this.setFormat} format={this.state.format}/>
+        <Report format={this.state.format} renderPageNumbers={renderPageNumbers} renderEntries={renderEntries} report={this.state.report} />
       </div>
 
     )

@@ -47,12 +47,12 @@ router.get('/getResults', (req, res, next) => {
 
       returnStravaResults.returnStravaResults((err, data) => {
         if (err) {
-          res.status(404).send(err)
+          res.status(err.status).send(err)
         } else {
           config.params.page += 1;
           returnStravaResults.returnStravaResults((err, secondData) => {
             if (err) {
-              res.status(404).send(err);
+              res.status(err.status).send(err);
             } else {
               res.status(200).send(data.concat(secondData));
             }
@@ -88,7 +88,7 @@ router.get('/getUserStats', (req, res, next) => {
           res.status(200).send(JSON.stringify(stats.data));
         })
         .catch((err) => {
-          res.status(404).send(err);
+          res.status(err.status).send(err);
         })
     }
   });
@@ -128,11 +128,7 @@ router.get('/getLoggedInUser', (req, res, next) => {
             })
         })
         .catch((err) => {
-          if (err.response.status === 429) {
-            res.status(429).send(err);
-          } else {
-            res.status(404).send('error')
-          }
+            res.status(err.status).send(err);
         })
     }
   })
@@ -151,7 +147,7 @@ router.get('/exchange_token', (req, res, next) => {
     }).then((auth) => {
       fs.writeFile('./server/storage.txt', auth, (err) => {
         if (err) {
-          res.send(err);
+          res.status(err.status).send(err);
         } else {
           res.redirect(`http://localhost:3000/index.html#`);
           // res.end('success');

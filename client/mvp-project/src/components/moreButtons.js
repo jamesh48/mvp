@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 const MoreButtons = (props) => {
   if (props.sport === 'Swim') {
     return (
@@ -27,7 +29,7 @@ const MoreButtons = (props) => {
         <input type="radio" id="allresults" name="distance" value="0" checked={props.distance === 0 ? 'Checked' : null} />
         <label for="allresults">All Results</label><br />
 
-        <input type="radio" id="5k" name="distance" value="5000" checked={props.checked} />
+        <input type="radio" id="5k" name="distance" value="5000"/>
         <label for="5k">5k</label><br />
 
         <input type="radio" id="10k" name="distance" value="10000" />

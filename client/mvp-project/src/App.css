@@ -106,5 +106,9 @@ ul, #user-profile, .form-buttons {
   display: inline-block;
 }
 
+.speed {
+  display: inline-block;
+}
+
 /* Progress Bar */
 /* -Progress Bar- */
