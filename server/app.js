@@ -67,6 +67,32 @@ router.get('/', (req, res, next) => {
   res.status(200).end();
 })
 
+router.get('/getUserStats', (req, res, next) => {
+
+  fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      var config = {
+        method: 'GET',
+        url: `https://www.strava.com/api/v3/athletes/${req.query.id}/stats/`,
+        headers: {
+          'Authorization': data
+        },
+        data: ''
+      };
+
+      return axios(config)
+        .then((stats) => {
+          res.status(200).send(JSON.stringify(stats.data));
+        })
+        .catch((err) => {
+          res.status(404).send(err);
+        })
+    }
+  });
+});
+
 router.get('/getLoggedInUser', (req, res, next) => {
   fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
     if (err) {
@@ -78,17 +104,35 @@ router.get('/getLoggedInUser', (req, res, next) => {
         headers: {
           Authorization: data
         },
-        data: '',
+
         scope: 'activity:read_all'
       }
 
       return axios(config)
         .then((athlete) => {
-          console.log(athlete);
-          res.status(200).send(athlete.data);
+
+          const statsConfig = {
+            method: 'GET',
+            url: `https://www.strava.com/api/v3/athletes/${athlete.data.id}/stats/`,
+            headers: {
+              Authorization: data
+            },
+            data: ''
+          }
+
+          return axios(statsConfig)
+            .then((stats) => {
+              var fullAthlete = Object.assign(athlete.data, stats.data)
+              res.status(200).send(fullAthlete);
+            })
         })
         .catch((err) => {
-          res.status(404).send(err);
+          console.log(err.response.status)
+          if (err.response.status === 429) {
+            res.status(429).send(err);
+          } else {
+            res.status(404).send('error')
+          }
         })
     }
   })

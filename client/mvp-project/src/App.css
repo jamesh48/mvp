@@ -1,9 +1,16 @@
+ul {
+  padding: 0;
+}
+
+ul, #user-profile, .form-buttons {
+ margin: 0 2.5% 0 2.5%;
+}
 .entry {
   border: 1px solid black;
 }
 
 .entry >p {
-  padding-left: 2.5%;
+  padding-left: 1.5%;
 }
 
 .uls {
@@ -14,6 +21,7 @@
   border: 1px solid black;
   padding: 5px 10px 5px 10px;
   background-color: paleturquoise;
+  margin-top: 5px;
 }
 
 .pagenos:hover {
@@ -30,22 +38,31 @@
 }
 
 #button-layout {
-  display: grid;
-  grid-template-columns: auto;
+  /* display: grid;
+  grid-template-columns: auto; */
+}
+
+#report {
+
+  /* margin-bottom: 1%; */
+  /* padding: 0; */
 }
 
 #user-profile {
   display: grid;
   grid-template-columns: auto auto;
-  margin-bottom: 5px;
+  margin-top: .5%;
+  margin-bottom: 1%;
   width: 25%;
+  border-bottom: 1px solid black;
 }
 
 
 .form-buttons > input {
-  margin: none;
+  margin-bottom: .5%;
   display: inline-block;
   width: 100%;
+
 }
 
 #entry1 {
@@ -62,3 +79,6 @@
   background-color: #cd7f32;
   color: white;
 }
+
+/* Progress Bar */
+/* -Progress Bar- */

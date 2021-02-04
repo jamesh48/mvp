@@ -12,7 +12,9 @@ class App extends React.Component {
     this.showUserProfile = this.showUserProfile.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.setSport = this.setSport.bind(this);
+    this.updateProgressBar = this.updateProgressBar.bind(this);
 
+    this.myVar = '';
     this.state = {
       report: null,
       profile: null,
@@ -20,7 +22,8 @@ class App extends React.Component {
       currentPage: 1,
       entriesPerPage: 7,
       sport: 'Run',
-      checked: 'checked'
+      checked: 'checked',
+      progressBarProgress: 0,
     }
   }
 
@@ -41,13 +44,30 @@ class App extends React.Component {
     this.setState({ profile: userProfile })
   }
 
+  updateProgressBar(end, reset) {
+    if (end) {
+      this.setState({progressBarProgress: 100})
+    } else if (this.state.progressBarProgress === 95) {
+      return true;
+    } else if (reset) {
+      this.setState({progressBarProgress: 0});
+    } else {
+      this.setState(prevState =>{
+        return{
+             ...prevState,
+             progressBarProgress: prevState.progressBarProgress + 1
+        }
+     });
+    }
+  }
+
   componentDidMount() {
     document.title = 'Swim Report Generator';
     eventListeners.getLoggedInUser((user) => {
       this.showUserProfile(user);
-    })
-  }
+    });
 
+  }
 
   render() {
     // https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-reactjs
@@ -80,9 +100,9 @@ class App extends React.Component {
     });
 
     return (
-      <div>
+      <div id='body'>
         <Profile profile={this.state.profile} />
-        <Buttons eventListeners={eventListeners} setSport ={this.setSport} updateReport={this.updateReport} sport={this.state.sport}/>
+        <Buttons eventListeners={eventListeners} setSport ={this.setSport} updateReport={this.updateReport} sport={this.state.sport} checked={this.state.checked} updateProgressBar={this.updateProgressBar} progressBarProgress={this.state.progressBarProgress}/>
         <Report renderPageNumbers = {renderPageNumbers} renderEntries = {renderEntries} report={this.state.report} />
       </div>
 

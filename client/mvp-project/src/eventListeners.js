@@ -13,7 +13,8 @@ const eventListeners = {
       url: 'http://localhost:8000/getLoggedInUser',
       // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
       success: (data) => {
-        console.log(data);
+        console.log(data.ytd_swim_totals);
+        console.log(data.ytd_run_totals);
         var formatedUser = formatUser(data);
         callback(formatedUser);
       },
@@ -23,21 +24,35 @@ const eventListeners = {
     })
   },
 
-  getUserActivities: (event, sport, callback) => {
+  getUserActivities: (updateProgressBar, event, sport, callback) => {
     event.preventDefault();
+
+    const moveProgressBar = setInterval(() => {
+      var test = updateProgressBar()
+      if (test === true) {
+        clearInterval(moveProgressBar);
+      }
+    }, 90);
+
     $.ajax({
       method: 'GET',
       url: 'http://127.0.0.1:8000/getResults',
       // url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
       contentType: 'application/json',
-
       success: (data) => {
+        clearInterval(moveProgressBar)
+        updateProgressBar('end');
         const sortedResults = sortResults(data);
         const formatedResults = formatResults(sortedResults, sport);
         callback(formatedResults);
       },
       error: (err) => {
         console.log(err);
+      },
+      complete: () => {
+        setTimeout(() => {
+          updateProgressBar(null, 'reset');
+        }, 500)
       }
     })
   }
@@ -71,31 +86,18 @@ const formatResults = (data, sport) => {
   })
 }
 
-// const formatResults = (data) => {
-//   return data.filter(entry => entry.type === 'Run' && entry.distance !== 0).map((entry, index) => {
-//     var entryStr = `<div id=${'entry' + (index + 1)} class='entry'>`
-//     entryStr += `<p class='entry-title'>${index + 1}. ${entry.name}</p>`
-//     entryStr += `<p>Distance Ran- ${entry.distance} Meters</p>`
-//     entryStr += `<p>Time Elapsed- ${handleTime(entry['moving_time'])}</p>`
-//     entryStr += `<p>${(entry.distance / entry.moving_time).toFixed(2)} Meters per Second</p>`
-//     var entryDate = new Date(entry.start_date).toLocaleString();
-//     entryStr += `<p>At ${entryDate}</p>`
-//     entryStr += `</div>`
-//     return parse(entryStr);
-//   })
-// }
-
 const handleTime = (movingTime) => {
   return new Date(movingTime * 1000).toISOString().substr(11, 8)
 }
 
 const formatUser = (user) => {
-  console.log(user);
+  console.log(user.ytd_swim_totals);
   var resultStr = '<div id=user-profile>';
   resultStr += `<img id='user-img' src='${user.profile}'/>`
   resultStr += `<span id='user-info'>`
   resultStr += `<p id='user-name'>${user.firstname} ${user.lastname}</p>`;
   resultStr += `<p id='user-location'>${user.city}, ${user.state} ${user.country}</p>`
+  resultStr += `<p id='ytd_run_totals'>Year-To-Date Run Totals: ${user.ytd_run_totals.distance}</p>`
   resultStr += `</span>`
 
   resultStr += '</div>'

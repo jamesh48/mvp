@@ -1,7 +1,7 @@
 const Report = (props) => {
   // return props.report ? props.report : null
   return (
-    <div>
+    <div id='report'>
       <ul className ='uls'>
         {props.renderEntries}
       </ul>

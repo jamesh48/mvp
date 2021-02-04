@@ -1,9 +1,12 @@
+import ProgressBar from './progressbar/progress-bar';
+
 const Buttons = (props) => {
+
   return (
     <div id='button-layout'>
       <div>
         <form className='form-buttons' onSubmit={(event) => {
-          props.eventListeners.getUserActivities(event, props.sport, (results) => {
+          props.eventListeners.getUserActivities(props.updateProgressBar, event, props.sport, (results) => {
             props.updateReport(results);
           });
         }
@@ -18,6 +21,7 @@ const Buttons = (props) => {
             <label for="walk">Walking</label><br />
           </div>
           <br/>
+             <ProgressBar completed={props.progressBarProgress}/>
           <input type='submit' value='Get Results!'></input>
         </form>
       </div>
