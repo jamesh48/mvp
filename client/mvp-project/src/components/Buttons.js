@@ -9,8 +9,8 @@ const Buttons = (props) => {
     <div>
       <div>
         <div id='button-layout'>
-          <ChooseSport setSport={props.setSport} checked={props.checked} />
-          <ChooseDistance distance={props.distance} sport={props.sport} setDistance={props.setDistance} />
+          <ChooseSport setSport={props.setSport} />
+          <ChooseDistance distance={props.distance} sport={props.sport} setDistance={props.setDistance}  checked={props.checked} />
           <ChooseFormat format={props.format} sport={props.sport} setFormat={props.setFormat} />
         </div>
         <ProgressBar completed={props.progressBarProgress} />

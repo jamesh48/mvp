@@ -1,6 +1,6 @@
 const ChooseFormat = (props) => {
   return (
-    <div className='choose-radio' onClick={(event) => props.setFormat(event)}>
+    <div className='choose-radio'>
       {
         props.sport === 'Swim' ?
           <div>

@@ -1,8 +1,9 @@
 import $ from "jquery";
 import parse from 'html-react-parser';
 import config from './settings';
-import testData from './testData';
-import profileTestData from './profileTestData';
+import testData from './Test\ Data/testData';
+import profileTestData from './Test\ Data/profileTestData';
+import topActivities from './Test\ Data/topActivityTestData';
 
 
 const requestFunctions = {
@@ -48,9 +49,11 @@ const requestFunctions = {
         callback(data);
       },
       error: (err) => {
-        console.log(err);
+        // console.log(err);
         clearInterval(moveProgressBar);
         updateProgressBar('end');
+        console.log(testData[0].length)
+        console.log(JSON.stringify(testData[1]));
         callback(testData)
       },
       complete: () => {

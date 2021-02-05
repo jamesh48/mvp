@@ -1,5 +1,6 @@
 const ChooseDistance = (props) => {
   if (props.sport === 'Swim') {
+    console.log(props.checked);
     return (
       <div className='choose-radio'>
         <h4 className='choose-title' id='choose-distance'>Choose Distance</h4>
@@ -18,6 +19,9 @@ const ChooseDistance = (props) => {
 
         <input type="radio" id="10k" name="swimdistance" value="10000" onClick={(event) => props.setDistance(event)} />
         <label for="10k">10k</label><br />
+
+        <input type='radio' name='swimdistance' disabled hidden checked={props.checked ? 'Checked' : null}/>
+        <input id='custom-distance' name='swimdistance' onChange={(event) => {event.preventDefault(); props.setDistance(event, 'check') }} type='text' placeholder='Custom Distance' value={props.checked ? null : ''}></input>
       </div>
     )
   } else if (props.sport === 'Run') {
@@ -38,6 +42,10 @@ const ChooseDistance = (props) => {
 
         <input type="radio" id="marathon" name="distance" value="42195" onClick={(event) => props.setDistance(event)} />
         <label for="marathon">Marathon</label><br />
+
+        <input type='radio' name='distance' disabled hidden checked={props.checked ? 'Checked' : null}/>
+        <input id='custom-distance' name='distance' onChange={(event) => {event.preventDefault(); props.setDistance(event, 'check') }} type='text' placeholder='Custom Distance' value={props.checked ? null : ''}></input>
+
       </div>
     )
   } else {

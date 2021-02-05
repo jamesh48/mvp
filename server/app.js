@@ -68,31 +68,31 @@ router.get('/', (req, res, next) => {
   res.status(200).end();
 })
 
-router.get('/getUserStats', (req, res, next) => {
+// router.get('/getUserStats', (req, res, next) => {
 
-  fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      var config = {
-        method: 'GET',
-        url: `https://www.strava.com/api/v3/athletes/${req.query.id}/stats/`,
-        headers: {
-          'Authorization': data
-        },
-        data: ''
-      };
+//   fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       var config = {
+//         method: 'GET',
+//         url: `https://www.strava.com/api/v3/athletes/${req.query.id}/stats/`,
+//         headers: {
+//           'Authorization': data
+//         },
+//         data: ''
+//       };
 
-      return axios(config)
-        .then((stats) => {
-          res.status(200).send(JSON.stringify(stats.data));
-        })
-        .catch((err) => {
-          res.status(err.response.status).send(err);
-        })
-    }
-  });
-});
+//       return axios(config)
+//         .then((stats) => {
+//           res.status(200).send(JSON.stringify(stats.data));
+//         })
+//         .catch((err) => {
+//           res.status(err.response.status).send(err);
+//         })
+//     }
+//   });
+// });
 
 router.get('/getLoggedInUser', (req, res, next) => {
   fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
@@ -126,10 +126,12 @@ router.get('/getLoggedInUser', (req, res, next) => {
               var fullAthlete = Object.assign(athlete.data, stats.data)
               res.status(200).send(fullAthlete);
             })
+            .catch((err) => {
+              res.status(err.response.status).send(err);
+            })
         })
         .catch((err) => {
-          console.log(err)
-            res.status(err.response.status).send(err);
+          res.status(err.response.status).send(err);
         })
     }
   })
@@ -187,4 +189,6 @@ app.listen(port, () => {
 //Third- Get Request- In getStravaResults.js
 //https://www.strava.com/api/v3/athlete/activities
 //With Auth set to OAUTH2.0 with provided access-token
+
+
 

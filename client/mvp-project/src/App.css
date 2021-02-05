@@ -28,16 +28,20 @@ body {
   background-color: paleturquoise;
 }
 
-.inner-entry:hover {
+/* .inner-entry:hover {
   background-color: darkturquoise;
-}
+} */
 
-.inner-entry:hover > p {
+/* .inner-entry:hover > p {
   color: ivory;
+} */
+
+.inner-entry > p, .detailed-entry > p {
+  padding-left: 1.5%;
 }
 
-.inner-entry >p {
-  padding-left: 1.5%;
+.detailed-entry {
+  border: 2px solid orangered;
 }
 
 .page-no-uls, .entry-uls {
@@ -166,6 +170,13 @@ body {
   display: inline;
   padding: none;
 }
+
+#custom-distance {
+  margin-top: 1.5%;
+  margin-left: 5%
+}
+
+
 
 
 /* Progress Bar */

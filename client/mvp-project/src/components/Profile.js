@@ -1,7 +1,6 @@
 import parse from 'html-react-parser';
 
 const Profile = (props) => {
-  // return props.profile ? parse(props.profile) : null;
   if (Object.keys(props.profile).length === 0) {
     return null
   }
