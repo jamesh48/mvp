@@ -1,13 +1,6 @@
 import React from 'react';
 
 const ProgressBar = (props) => {
-  const containerStyles = {
-    height: 20,
-    width: '100%',
-    backgroundColor: 'orange',
-    borderRadius: 50,
-    marginBottom: 5
-  }
 
   const fillerStyles = {
     width: `${props.completed}%`,
@@ -23,9 +16,10 @@ const ProgressBar = (props) => {
     color: 'white',
     fontWeight: 'bold'
   }
-return props.completed === 0 ? null :
+
+return props.completed === 0 ? <div><br/><br/></div> :
  (
-    <div style={containerStyles}>
+    <div id='progress-bar-container'>
       <div style={fillerStyles}>
         <span style={labelStyles}>{`${props.completed}%`}</span>
       </div>

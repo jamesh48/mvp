@@ -13,18 +13,21 @@ const Entry = (props) => {
   } else {
     pastTense = 'traveled-'
   }
+
   const handleTime = (movingTime, pace) => {
-    if (pace) {
-      return new Date(movingTime * 1000).toISOString().substr(15, 4)
+    if (movingTime !== Infinity) {
+      if (pace) {
+        return new Date(movingTime * 1000).toISOString().substr(15, 4)
+      }
+      return new Date(movingTime * 1000).toISOString().substr(11, 8)
+    } else {
+      return '00:00'
     }
-    return new Date(movingTime * 1000).toISOString().substr(11, 8)
   }
 
-  // return <div>{JSON.stringify(props.entry)}</div>
-
   return (
-    <div id='entry' className='entry'>
-      <p class='entry-title'>{props.entry.name}</p>
+    <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
+      <h4 className='entry-title'>{props.entry.name}</h4>
       {props.format !== 'avgypace' ?
         <p>Distance {pastTense} {props.entry.distance} Meters</p> :
         <p>Distance {pastTense} {(props.entry.distance * 1.09361).toFixed()} Yards</p>
@@ -36,8 +39,8 @@ const Entry = (props) => {
           props.format === 'mps' ? <p><p className='speed'>{((props.entry.distance / props.entry.moving_time)).toFixed(2)} </p> Meters Per Second</p> :
             props.format === 'avgypace' ? <p><p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * 1.09361) / 100)), 'pace')} </p>/100 yards</p> :
 
-            props.format === 'avgmpace' ? <p><p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
-      : null
+              props.format === 'avgmpace' ? <p><p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
+                : null
       }
 
       <p>{new Date(props.entry.start_date).toLocaleString()}</p>
