@@ -14,8 +14,8 @@ const requestFunctions = {
   getLoggedInUser: (callback) => {
     $.ajax({
       method: 'GET',
-      url: 'http://localhost:8000/getLoggedInUser',
-      // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+      // url: 'http://localhost:8000/getLoggedInUser',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
       success: (data) => {
         callback(data);
       },
@@ -41,8 +41,8 @@ const requestFunctions = {
 
     $.ajax({
       method: 'GET',
-      url: 'http://127.0.0.1:8000/getResults',
-      // url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
+      // url: 'http://127.0.0.1:8000/getResults',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
       contentType: 'application/json',
       success: (data) => {
         clearInterval(moveProgressBar)
