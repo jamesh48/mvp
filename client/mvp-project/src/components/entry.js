@@ -32,9 +32,8 @@ const Entry = (props) => {
     }
   }
 
-  // if (Number(props.no + 1) === 1 && props.currentTopActivity && (props.entry.type === props.currentTopActivity.type)) {
+  // Detailed Entry
   if (props.currentActivity.id === props.entry.id) {
-    // Detailed Entry
     return (
       <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
         <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
@@ -44,13 +43,22 @@ const Entry = (props) => {
         }
         <p>Time Elapsed- {handleTime(props.entry.moving_time)}</p>
 
-        {/* Format */}
+        {/* Avg Speed Format */}
         {props.format === 'kph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * mps2kph).toFixed(2)} </p> Kilometers Per Hour</p> :
           props.format === 'mph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * 2.237).toFixed(2)} </p> Miles Per Hour</p> :
             props.format === 'mps' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time)).toFixed(2)}</p> Meters Per Second</p> :
               props.format === 'avgypace' ? <p>Avg Pace- <p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * m2y) / 100)), 'pace')}</p>/100 yards</p> :
 
                 props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
+                  : null
+        }
+        {/* Max Speed Format  */}
+        {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
+          props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
+            props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
+              props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
+
+                props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
                   : null
         }
         <p>{new Date(props.entry.start_date).toLocaleString()}</p>
@@ -113,19 +121,6 @@ const Entry = (props) => {
       </div>
     )
   }
-  // average_heartrate
-  // max_heartrate
-  // achievement_count
-  // kudos_count
-  // comment_count
-  // average_speed
-  // max_speed
-  // description
-  // photos.primary.urls.100/600
-  // device_name
-
-
-
 
   // General Entry
   return (
