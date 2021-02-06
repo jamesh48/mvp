@@ -35,33 +35,35 @@ const Entry = (props) => {
   // Detailed Entry
   if (props.currentActivity.id === props.entry.id) {
     return (
-      <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
-        <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
-        {props.format !== 'avgypace' ?
-          <p>Distance {pastTense} {props.entry.distance} Meters</p> :
-          <p>Distance {pastTense} {(props.entry.distance * m2y).toFixed()} Yards</p>
-        }
-        <p>Time Elapsed- {handleTime(props.entry.moving_time)}</p>
+      <div id={(Number(props.no) >= 0 && Number(props.no) <= 2) ? ('entry' + (Number(props.no) + 1)) : null} className='inner-entry'>
+      <div className={(Number(props.no) >= 0 && Number(props.no) <= 2) ? ('general-entry special-entry') : 'general-entry'}>
+          <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
+          {props.format !== 'avgypace' ?
+            <p>Distance {pastTense} {props.entry.distance} Meters</p> :
+            <p>Distance {pastTense} {(props.entry.distance * m2y).toFixed()} Yards</p>
+          }
+          <p>Time Elapsed- {handleTime(props.entry.moving_time)}</p>
 
-        {/* Avg Speed Format */}
-        {props.format === 'kph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * mps2kph).toFixed(2)} </p> Kilometers Per Hour</p> :
-          props.format === 'mph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * 2.237).toFixed(2)} </p> Miles Per Hour</p> :
-            props.format === 'mps' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time)).toFixed(2)}</p> Meters Per Second</p> :
-              props.format === 'avgypace' ? <p>Avg Pace- <p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * m2y) / 100)), 'pace')}</p>/100 yards</p> :
+          {/* Avg Speed Format */}
+          {props.format === 'kph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * mps2kph).toFixed(2)} </p> Kilometers Per Hour</p> :
+            props.format === 'mph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * 2.237).toFixed(2)} </p> Miles Per Hour</p> :
+              props.format === 'mps' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time)).toFixed(2)}</p> Meters Per Second</p> :
+                props.format === 'avgypace' ? <p>Avg Pace- <p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * m2y) / 100)), 'pace')}</p>/100 yards</p> :
 
-                props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
-                  : null
-        }
-        {/* Max Speed Format  */}
-        {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
-          props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
-            props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
-              props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
+                  props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
+                    : null
+          }
+          {/* Max Speed Format  */}
+          {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
+            props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
+              props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
+                props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
 
-                props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
-                  : null
-        }
-        <p>{new Date(props.entry.start_date).toLocaleString()}</p>
+                  props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
+                    : null
+          }
+          <p>{new Date(props.entry.start_date).toLocaleString()}</p>
+        </div>
 
         <div className='detailed-entry'>
           {/* Description */}
@@ -124,34 +126,36 @@ const Entry = (props) => {
 
   // General Entry
   return (
-    <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
-      <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
-      {props.format !== 'avgypace' ?
-        <p>Distance {pastTense} {props.entry.distance} Meters</p> :
-        <p>Distance {pastTense} {(props.entry.distance * 1.094).toFixed()} Yards</p>
-      }
-      <p>Time Elapsed- {handleTime(props.entry.moving_time)}</p>
+    <div id={(Number(props.no) >= 0 && Number(props.no) <= 2) ? ('entry' + (Number(props.no) + 1)) : null} className='inner-entry'>
+      <div className={(Number(props.no) >= 0 && Number(props.no) <= 2) ? ('general-entry special-entry') : 'general-entry'}>
+        <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
+        {props.format !== 'avgypace' ?
+          <p>Distance {pastTense} {props.entry.distance} Meters</p> :
+          <p>Distance {pastTense} {(props.entry.distance * 1.094).toFixed()} Yards</p>
+        }
+        <p>Time Elapsed- {handleTime(props.entry.moving_time)}</p>
 
-      {/* Format */}
-      {props.format === 'kph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * mps2kph).toFixed(2)} </p> kph</p> :
-        props.format === 'mph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * 2.237).toFixed(2)} </p>mph</p> :
-          props.format === 'mps' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time)).toFixed(2)} </p>mps</p> :
-            props.format === 'avgypace' ? <p>Avg Pace- <p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * 1.094) / 100)), 'pace')}</p>/100 yards</p> :
+        {/* Format */}
+        {props.format === 'kph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * mps2kph).toFixed(2)} </p> kph</p> :
+          props.format === 'mph' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time) * 2.237).toFixed(2)} </p>mph</p> :
+            props.format === 'mps' ? <p>Avg Pace- <p className='speed'>{((props.entry.distance / props.entry.moving_time)).toFixed(2)} </p>mps</p> :
+              props.format === 'avgypace' ? <p>Avg Pace- <p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * 1.094) / 100)), 'pace')}</p>/100 yards</p> :
 
-              props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
-                : null
-      }
-      {/* Max Speed Format  */}
-      {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
-        props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
-          props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
-            props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
+                props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
+                  : null
+        }
+        {/* Max Speed Format  */}
+        {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
+          props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
+            props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
+              props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
 
-              props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
-                : null
-      }
+                props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
+                  : null
+        }
 
-      <p>{new Date(props.entry.start_date).toLocaleString()}</p>
+        <p>{new Date(props.entry.start_date).toLocaleString()}</p>
+      </div>
     </div>
   )
 }

@@ -1,5 +1,5 @@
-const config = {
+const settings = {
   userId: 61039
 }
 
-export default config;
+export default settings;

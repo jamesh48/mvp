@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import settings from './settings';
+import testData from './Test\ Data/testData';
+import profileTestData from'./Test\ Data/profileTestData';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App testData={testData} profileTestData={profileTestData} settings={settings}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

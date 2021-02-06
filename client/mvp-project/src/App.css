@@ -31,9 +31,12 @@ body {
 }
 
 .inner-entry {
+  /* padding: 5px; */
   border: 1px solid coral;
   background-color: paleturquoise;
 }
+
+
 
 /* .inner-entry:hover {
   background-color: darkturquoise;
@@ -48,8 +51,12 @@ body {
   border: 2px solid orangered;
 }
 
-.inner-entry > p, .detailed-entry > p {
+.general-entry > p, .detailed-entry > p {
   padding-left: 1.5%;
+}
+
+.general-entry {
+  padding: 10px;
 }
 
 .page-no-uls, .entry-uls {
@@ -139,12 +146,13 @@ body {
   color: ivory;
 }
 
-#entry1 > a, #entry2 > a, #entry3 > a {
+.special-entry > a {
   color: ivory;
-  /* background-color: blue; */
   padding-left: 5px;
 }
-
+.special-entry > a:hover {
+  color: blue;
+}
 
 .entry-title:hover {
   color: blue;

@@ -1,6 +1,6 @@
 const ChooseSport = (props) => {
   return (
-    <div>
+    <div className='choose-radio'>
       <h4 className ='choose-title' id='choose-sport'>Choose Sport</h4>
       <input type="radio" id="run" name="modality" value="Run" defaultChecked onClick={(event) => props.setSport(event)} />
       <label for="run">Running</label><br />

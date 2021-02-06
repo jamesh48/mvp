@@ -2,7 +2,6 @@ import '../App.css';
 import Report from './Report';
 import Buttons from './Buttons';
 import Profile from './Profile';
-import requestFunctions from '../requestFunctions.js';
 import React from 'react';
 import Entry from './entry';
 const axios = require('axios');
@@ -10,6 +9,9 @@ const axios = require('axios');
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.getLoggedInUser = this.getLoggedInUser.bind(this)
+    this.authorize = this.authorize.bind(this);
+    this.getUserActivities = this.getUserActivities.bind(this);
     this.updateReport = this.updateReport.bind(this);
     this.showUserProfile = this.showUserProfile.bind(this);
     this.updateProgressBar = this.updateProgressBar.bind(this);
@@ -38,6 +40,68 @@ class App extends React.Component {
     };
   };
 
+  authorize = (props) => {
+    window.open(`https://www.strava.com/oauth/authorize?client_id=${this.props.settings}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
+  }
+
+  getLoggedInUser = (callback) => {
+    const config = {
+      'method': 'GET',
+      // 'url': 'http://localhost:8000/getLoggedInUser',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+    }
+
+    return axios(config)
+      .then((loggedInUser) => {
+        callback(loggedInUser.data)
+      })
+      .catch((error) => {
+        if (error.status === 429) {
+          console.log(`Error ${error.status}: ${error.statusText}`);
+          callback(this.props.profileTestData);
+        } else {
+          console.log(`Error ${error.status}: ${error.statusText}`);
+          this.authorize();
+        }
+      })
+  }
+
+  getUserActivities = (updateProgressBar, callback) => {
+    // callback(testData)
+    const moveProgressBar = setInterval(() => {
+      var test = updateProgressBar()
+      if (test === true) {
+        clearInterval(moveProgressBar);
+      }
+    }, 90);
+
+    const config = {
+      'method': 'GET',
+      // url: 'http://127.0.0.1:8000/getResults',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
+    }
+
+    return axios(config)
+      .then((userEntries) => {
+        clearInterval(moveProgressBar)
+        updateProgressBar('end');
+        callback(userEntries.data);
+      })
+      .catch((err) => {
+        clearInterval(moveProgressBar);
+        updateProgressBar('end');
+        callback(this.props.testData);
+        console.log(err.statusText);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          updateProgressBar(null, 'reset');
+        }, 400)
+      })
+  }
+
+
+
   handleClick = ({ target: { id } }) => {
     this.setState({
       currentPage: Number(id)
@@ -63,8 +127,8 @@ class App extends React.Component {
 
     var config = {
       'method': 'GET',
-      'url': 'http://localhost:8000/individualEntry',
-      // url: 'https://aqueous-fjord-59533.herokuapp.com/individualEntry',
+      // 'url': 'http://localhost:8000/individualEntry',
+      url: 'https://aqueous-fjord-59533.herokuapp.com/individualEntry',
       'contentType': 'application/json',
       params: {
         'entryid': testid
@@ -147,9 +211,9 @@ class App extends React.Component {
 
   componentDidMount() {
     document.title = 'Strava Report Generator';
-    requestFunctions.getLoggedInUser((user) => {
+    this.getLoggedInUser((user) => {
       this.showUserProfile(user);
-      requestFunctions.getUserActivities(this.updateProgressBar, (results) => {
+      this.getUserActivities(this.updateProgressBar, (results) => {
         this.updateReport(results);
       });
     });
