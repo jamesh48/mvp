@@ -89,7 +89,7 @@ const Entry = (props) => {
               :
               <div id='golden-heart-rate'>
                 <img id='heart-rate-img' src='/images/heartrate.png' />
-                <h5 className='heart-rate' id='avg-heart-rate'><p>No Heart Rate Detected</p></h5>
+                <h5 className='heart-rate' id='avg-heart-rate'><p>No HR Info Available</p></h5>
                 <h5 className='heart-rate' id='max-heart-rate'><p></p></h5>
               </div>
             }

@@ -24,6 +24,7 @@ const requestFunctions = {
           console.log(`Error ${err.status}: ${err.statusText}`);
           callback(profileTestData);
         } else {
+          console.log(`Error ${err.status}: ${err.statusText}`);
           requestFunctions.authorize();
         }
       }

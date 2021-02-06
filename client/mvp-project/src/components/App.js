@@ -63,8 +63,8 @@ class App extends React.Component {
 
     var config = {
       'method': 'GET',
-      // 'url': 'http://localhost:8000/individualEntry',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/individualEntry',
+      'url': 'http://localhost:8000/individualEntry',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/individualEntry',
       'contentType': 'application/json',
       params: {
         'entryid': testid
