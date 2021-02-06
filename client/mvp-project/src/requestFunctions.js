@@ -28,6 +28,7 @@ const requestFunctions = {
         }
       }
     });
+    // callback(profileTestData);
   },
 
   getUserActivities: (updateProgressBar, callback) => {
@@ -49,12 +50,9 @@ const requestFunctions = {
         callback(data);
       },
       error: (err) => {
-        // console.log(err);
         clearInterval(moveProgressBar);
         updateProgressBar('end');
-        console.log(testData[0].length)
-        console.log(JSON.stringify(testData[1]));
-        callback(testData)
+        console.log(err.statusText);
       },
       complete: () => {
         setTimeout(() => {
@@ -62,7 +60,9 @@ const requestFunctions = {
         }, 400)
       }
     });
-  }
+  // callback(testData, topActivities)
+
+}
 }
 
 export default requestFunctions;

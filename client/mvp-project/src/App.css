@@ -9,8 +9,11 @@ h4,p {
 }
 
 #user-img {
-  /* border: 1px solid black; */
   border-right: none;
+}
+
+#activity-photo {
+  height: 150px;
 }
 
 
@@ -38,10 +41,6 @@ body {
 
 .inner-entry > p, .detailed-entry > p {
   padding-left: 1.5%;
-}
-
-.detailed-entry {
-  border: 2px solid orangered;
 }
 
 .page-no-uls, .entry-uls {
@@ -176,7 +175,59 @@ body {
   margin-left: 5%
 }
 
+#fun-stats {
+  display: grid;
+  margin-left: 2.5%;
+  grid-template-columns: 14% 20.5% 17.5% 2% auto;
+  grid-template-rows: auto;
+}
 
+#top-activity-gear {
+  margin-left: 1.5%;
+}
+
+#golden-heart-rate, #kudos, #trophy-case {
+  display: grid;
+  grid-template-columns: 60px auto;
+  grid-template-rows: 25px 25px;
+  grid-template-areas:
+  "photo ahr"
+  "photo mhr";
+}
+
+.hr {
+  border: 2px solid coral;
+}
+
+#heart-rate-img, #kudos-img, #trophy-img {
+  height: 50px;
+  width: 50px;
+  grid-area: photo;
+}
+
+#max-heart-rate, #comment-count, #empty-count {
+  grid-area: mhr;
+}
+
+#avg-heart-rate, #kudos-count, #achievement-count {
+  grid-area: ahr;
+}
+
+#top-activity-description{
+  margin-left: 1%;
+  margin-bottom: 1%;
+}
+
+/* #top-activity-description > h4 {
+  text-decoration: underline;
+} */
+
+.heart-rate, .kudos, .achievements {
+  margin: 0;
+}
+.heart-rate, .heart-rate > p, .kudos, .kudos > p, .achievements, .achievements > p {
+  display: inline-block;
+}
 
 
 /* Progress Bar */

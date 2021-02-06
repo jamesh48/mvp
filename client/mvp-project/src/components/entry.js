@@ -1,4 +1,6 @@
 import React from 'react';
+// import '86592.png' from './86592.png';
+
 
 const Entry = (props) => {
   var pastTense = '';
@@ -49,22 +51,78 @@ const Entry = (props) => {
                 props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
                   : null
         }
-        <div className='detailed-entry'>
-        {/* Max Speed Format  */}
-        {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
-          props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
-            props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
-              props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
-
-                props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
-                  : null
-        }
-        </div>
-
         <p>{new Date(props.entry.start_date).toLocaleString()}</p>
+        <hr class='hr' />
+
+        <div className='detailed-entry'>
+          {/* Description */}
+          <div id='top-activity-description'>
+            <h4>Top Activity Description:</h4>
+            <p id='top-activity-description'>{props.currentTopActivity.description}</p>
+          </div>
+          {/* Kudos & Comments */}
+          <div id='fun-stats'>
+            <div id='kudos'>
+              <img id='kudos-img' src='/images/kudos.jpeg' />
+              <h5 id='kudos-count' className='kudos'>Kudos- <p>{props.currentTopActivity.kudos_count}</p></h5>
+              <h5 id='comment-count' className='kudos'>Comments- <p>{props.currentTopActivity.comment_count}</p></h5>
+            </div>
+
+            {/* Heart Rate */}
+
+            {props.currentTopActivity.average_heartrate !== undefined ?
+              <div id='golden-heart-rate'>
+                <img id='heart-rate-img' src='/images/heartrate.png' />
+                <h5 id='avg-heart-rate' className='heart-rate'>Avg Heart Rate- <p>{props.currentTopActivity.average_heartrate} bpm</p></h5>
+                <h5 id='max-heart-rate' className='heart-rate'>Max Heart Rate- <p>{props.currentTopActivity.max_heartrate} bpm</p></h5>
+              </div>
+
+              :
+              <div id='golden-heart-rate'>
+                <img id='heart-rate-img' src='/images/heartrate.png' />
+                <h5 className='heart-rate' id='avg-heart-rate'><p>No Heart Rate Detected</p></h5>
+                <h5 className='heart-rate' id='max-heart-rate'><p></p></h5>
+              </div>
+            }
+
+            {/* Trophy Case */}
+            <div id='trophy-case'>
+              <img id='trophy-img' src='/images/trophy.jpeg' />
+              <h5 className='achievements' id='acheivement-count'>Acheivement Count-
+               <p>{props.currentTopActivity.achievement_count}</p>
+              </h5>
+              <h5 className='achievements' id='empty-count'><p></p></h5>
+            </div>
+
+            {/* Empty Div For Spacing */}
+            <div></div>
+
+            <img id='activity-photo' src={props.currentTopActivity.photos.primary.urls['600']}></img>
+
+          </div>
+          {/* Gear */}
+          <div id='top-activity-gear'>
+            <p>Gear: {props.currentTopActivity.device_name}</p>
+          </div>
+
+        </div>
       </div>
     )
   }
+  // average_heartrate
+  // max_heartrate
+  // achievement_count
+  // kudos_count
+  // comment_count
+  // average_speed
+  // max_speed
+  // description
+  // photos.primary.urls.100/600
+  // device_name
+
+
+
+
   // General Entry
   return (
     <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
@@ -82,6 +140,15 @@ const Entry = (props) => {
             props.format === 'avgypace' ? <p>Avg Pace- <p className='speed'>{handleTime((props.entry.moving_time / ((props.entry.distance * 1.094) / 100)), 'pace')}</p>/100 yards</p> :
 
               props.format === 'avgmpace' ? <p>Avg Pace- <p className='speed'>{handleTime(props.entry.moving_time / (props.entry.distance / 100), 'pace')}</p>/100 Meters</p>
+                : null
+      }
+      {/* Max Speed Format  */}
+      {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
+        props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
+          props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :
+            props.format === 'avgypace' ? <p>Max Speed- <p className='speed'>{handleTime(100 / (props.entry.max_speed * m2y), 'pace')}</p>/100 yards</p> :
+
+              props.format === 'avgmpace' ? <p>Max Speed- <p className='speed'>{handleTime((100 / props.entry.max_speed), 'pace')}</p>/100 Meters</p>
                 : null
       }
 

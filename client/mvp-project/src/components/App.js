@@ -91,20 +91,21 @@ class App extends React.Component {
   }
 
   updateReport(report) {
-    const topSwim = report[1].find(entry => entry.type === 'Swim') || {};
-    const topRun = report[1].find(entry => entry.type === 'Run') || {};
-    const topRide = report[1].find(entry => entry.type === 'Ride') || {};
+    console.log(report)
+    console.log(Array.isArray(report[1]));
+    const topSwim = report[1].find(entry => entry.type === 'Swim');
+    const topRun = report[1].find(entry => entry.type === 'Run');
+    // const topRide = report[1].find(entry => entry.type === 'Ride');
+    // console.log(topSwim);
 
-    report = report[0].sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
-
-    const topActivities = [topSwim, topRun, topRide]
+    const topActivities = [topSwim, topRun, {}]
 
     this.setState((prevState, props) => {
       return {
         topActivities: topActivities,
         isLoaded: true,
-        totalEntries: report,
-        entries: report.filter((entry) => entry.type === 'Run')
+        totalEntries: report[0],
+        entries: report[0].filter((entry) => entry.type === 'Run')
       }
     }
     );
@@ -167,7 +168,7 @@ class App extends React.Component {
     return (
       <li className='inner-entry'>
         <h4 className='entry-title'>~No Entries Found~</h4>
-        <p>-Keep up the Good Work Champ!</p>
+        <p>But keep up the Good Work Champ!</p>
       </li>
     )
   }

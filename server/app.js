@@ -54,14 +54,43 @@ router.get('/getResults', (req, res, next) => {
             if (err) {
               res.status(err.response.status).send(err);
             } else {
-              res.status(200).send(data.concat(secondData));
+              var totalEntries = data.concat(secondData);
+              totalEntries = totalEntries.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
+
+              delete config.params
+
+              const topSwim = totalEntries.find(entry => entry.type === 'Swim');
+              const topRun = totalEntries.find(entry => entry.type === 'Run');
+
+              config.url = `https://www.strava.com/api/v3/activities/${topSwim.id}?include_all_efforts=true`
+
+              returnStravaResults.returnStravaResults((err, thirdData) => {
+                if (err) {
+                  res.status(err.response.status).send(err);
+                } else {
+                  console.log(thirdData);
+                  config.url = `https://www.strava.com/api/v3/activities/${topRun.id}?include_all_efforts=true`;
+
+                  returnStravaResults.returnStravaResults((err, fourthData) => {
+                    if (err) {
+                      console.log(err);
+                      res.status(404).send(err);
+                    } else {
+                      var result = [];
+                      var topResults = [];
+                      topResults.push(thirdData, fourthData);
+                      result.push(totalEntries, topResults);
+                      res.status(200).send(result);
+                    }
+                  }, config);
+                }
+              }, config);
             }
-          }, config)
+          }, config);
         }
       }, config);
-
     }
-  })
+  });
 })
 
 router.get('/', (req, res, next) => {
