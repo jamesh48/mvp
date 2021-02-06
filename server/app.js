@@ -56,42 +56,17 @@ router.get('/getResults', (req, res, next) => {
             } else {
               var totalEntries = data.concat(secondData);
               totalEntries = totalEntries.sort((a, b) => (b.distance / b.moving_time) - (a.distance / a.moving_time));
-
-              delete config.params
-
-              const topSwim = totalEntries.find(entry => entry.type === 'Swim');
-              const topRun = totalEntries.find(entry => entry.type === 'Run');
-
-              config.url = `https://www.strava.com/api/v3/activities/${topSwim.id}?include_all_efforts=true`
-
-              returnStravaResults.returnStravaResults((err, thirdData) => {
-                if (err) {
-                  res.status(err.response.status).send(err);
-                } else {
-                  console.log(thirdData);
-                  config.url = `https://www.strava.com/api/v3/activities/${topRun.id}?include_all_efforts=true`;
-
-                  returnStravaResults.returnStravaResults((err, fourthData) => {
-                    if (err) {
-                      console.log(err);
-                      res.status(404).send(err);
-                    } else {
-                      var result = [];
-                      var topResults = [];
-                      topResults.push(thirdData, fourthData);
-                      result.push(totalEntries, topResults);
-                      res.status(200).send(result);
-                    }
-                  }, config);
-                }
-              }, config);
+              res.status(200).send(totalEntries);
             }
           }, config);
         }
       }, config);
     }
   });
-})
+});
+
+
+
 
 router.get('/', (req, res, next) => {
   res.status(200).end();
@@ -191,8 +166,28 @@ router.get('/exchange_token', (req, res, next) => {
     })
 })
 
-router.post('/', (req, res, next) => {
-});
+router.get('/individualEntry', (req, res, next) => {
+  fs.readFile('./server/storage.txt', 'utf8', (err, data) => {
+    var config = {
+      'Method': 'GET',
+      url: `https://www.strava.com/api/v3/activities/${req.query.entryid}?include_all_efforts=true`,
+      headers: {
+        Authorization: data,
+      },
+    }
+    returnStravaResults.returnStravaResults((err, entry) => {
+      if (err) {
+        console.log(err);
+        res.status(400).send(err);
+      } else {
+        console.log(entry.data);
+        res.status(200).send(entry)
+      }
+    }, config)
+    // res.status(200).send('hello');
+  });
+})
+
 
 
 app.listen(port, () => {

@@ -3,6 +3,7 @@ import React from 'react';
 
 
 const Entry = (props) => {
+  console.log(props)
   var pastTense = '';
   if (props.sport === 'Walk') {
     pastTense = 'Walked-'
@@ -31,11 +32,12 @@ const Entry = (props) => {
     }
   }
 
-  if (Number(props.no + 1) === 1 && props.currentTopActivity && (props.entry.type === props.currentTopActivity.type)) {
+  // if (Number(props.no + 1) === 1 && props.currentTopActivity && (props.entry.type === props.currentTopActivity.type)) {
+  if (props.currentActivity.id === props.entry.id) {
     // Detailed Entry
     return (
       <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
-        <h4 className='entry-title'>{props.entry.name}</h4>
+        <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
         {props.format !== 'avgypace' ?
           <p>Distance {pastTense} {props.entry.distance} Meters</p> :
           <p>Distance {pastTense} {(props.entry.distance * m2y).toFixed()} Yards</p>
@@ -52,29 +54,28 @@ const Entry = (props) => {
                   : null
         }
         <p>{new Date(props.entry.start_date).toLocaleString()}</p>
-        <hr class='hr' />
 
         <div className='detailed-entry'>
           {/* Description */}
           <div id='top-activity-description'>
-            <h4>Top Activity Description:</h4>
-            <p id='top-activity-description'>{props.currentTopActivity.description}</p>
+            <h4>Activity Description:</h4>
+            <p id='top-activity-description'>{props.currentActivity.description}</p>
           </div>
           {/* Kudos & Comments */}
           <div id='fun-stats'>
             <div id='kudos'>
               <img id='kudos-img' src='/images/kudos.jpeg' />
-              <h5 id='kudos-count' className='kudos'>Kudos- <p>{props.currentTopActivity.kudos_count}</p></h5>
-              <h5 id='comment-count' className='kudos'>Comments- <p>{props.currentTopActivity.comment_count}</p></h5>
+              <h5 id='kudos-count' className='kudos'>Kudos- <p>{props.currentActivity.kudos_count}</p></h5>
+              <h5 id='comment-count' className='kudos'>Comments- <p>{props.currentActivity.comment_count}</p></h5>
             </div>
 
             {/* Heart Rate */}
 
-            {props.currentTopActivity.average_heartrate !== undefined ?
+            {props.currentActivity.average_heartrate !== undefined ?
               <div id='golden-heart-rate'>
                 <img id='heart-rate-img' src='/images/heartrate.png' />
-                <h5 id='avg-heart-rate' className='heart-rate'>Avg Heart Rate- <p>{props.currentTopActivity.average_heartrate} bpm</p></h5>
-                <h5 id='max-heart-rate' className='heart-rate'>Max Heart Rate- <p>{props.currentTopActivity.max_heartrate} bpm</p></h5>
+                <h5 id='avg-heart-rate' className='heart-rate'>Avg Heart Rate- <p>{props.currentActivity.average_heartrate} bpm</p></h5>
+                <h5 id='max-heart-rate' className='heart-rate'>Max Heart Rate- <p>{props.currentActivity.max_heartrate} bpm</p></h5>
               </div>
 
               :
@@ -88,8 +89,8 @@ const Entry = (props) => {
             {/* Trophy Case */}
             <div id='trophy-case'>
               <img id='trophy-img' src='/images/trophy.jpeg' />
-              <h5 className='achievements' id='acheivement-count'>Acheivement Count-
-               <p>{props.currentTopActivity.achievement_count}</p>
+              <h5 className='achievements' id='acheivement-count'>Achievement Count-
+               <p>{props.currentActivity.achievement_count}</p>
               </h5>
               <h5 className='achievements' id='empty-count'><p></p></h5>
             </div>
@@ -97,12 +98,15 @@ const Entry = (props) => {
             {/* Empty Div For Spacing */}
             <div></div>
 
-            <img id='activity-photo' src={props.currentTopActivity.photos.primary.urls['600']}></img>
+            {
+              props.currentActivity.photos.primary === null ? null :
+                <img id='activity-photo' src={props.currentActivity.photos.primary.urls['600']}></img>
+            }
 
           </div>
           {/* Gear */}
           <div id='top-activity-gear'>
-            <p>Gear: {props.currentTopActivity.device_name}</p>
+            <p>Gear: {props.currentActivity.device_name}</p>
           </div>
 
         </div>
@@ -126,7 +130,7 @@ const Entry = (props) => {
   // General Entry
   return (
     <div id={'entry' + (Number(props.no) + 1)} className='inner-entry'>
-      <h4 className='entry-title'>{props.entry.name}</h4>
+      <a className='entry-title' data-testId={props.entry.id} href='' onClick={(event => { event.preventDefault(); props.showIndividualEntry(event) })}>{props.entry.name}</a>
       {props.format !== 'avgypace' ?
         <p>Distance {pastTense} {props.entry.distance} Meters</p> :
         <p>Distance {pastTense} {(props.entry.distance * 1.094).toFixed()} Yards</p>

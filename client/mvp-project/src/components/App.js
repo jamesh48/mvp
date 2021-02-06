@@ -5,6 +5,7 @@ import Profile from './Profile';
 import requestFunctions from '../requestFunctions.js';
 import React from 'react';
 import Entry from './entry';
+const axios = require('axios');
 
 class App extends React.Component {
   constructor(props) {
@@ -12,9 +13,9 @@ class App extends React.Component {
     this.updateReport = this.updateReport.bind(this);
     this.showUserProfile = this.showUserProfile.bind(this);
     this.updateProgressBar = this.updateProgressBar.bind(this);
-    this.renderEntries = this.renderEntries.bind(this);
     this.renderEmpty = this.renderEmpty.bind(this);
     this.renderPageNumbers = this.renderPageNumbers.bind(this);
+    this.showIndividualEntry = this.showIndividualEntry.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.setSport = this.setSport.bind(this);
     this.setDistance = this.setDistance.bind(this);
@@ -32,8 +33,8 @@ class App extends React.Component {
       distance: 0,
       format: 'kph',
       isLoaded: false,
-      topActivities: [],
-      invalidEntry: false
+      invalidEntry: false,
+      currentActivity: {}
     };
   };
 
@@ -42,7 +43,6 @@ class App extends React.Component {
       currentPage: Number(id)
     })
   }
-
 
   setSport = ({ target: { value } }) => {
     this.setState((prevState, props) => {
@@ -58,6 +58,28 @@ class App extends React.Component {
       }
     });
   }
+
+  showIndividualEntry = ({ target: { dataset: { testid } } }) => {
+
+    var config = {
+      'method': 'GET',
+      'url': 'http://localhost:8000/individualEntry',
+      'contentType': 'application/json',
+      params: {
+        'entryid': testid
+      }
+    }
+
+    return axios(config)
+      .then((response) => {
+        this.setState({ currentActivity: response.data });
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+
 
   setDistance = ({ target: { value } }, checked) => {
     if (typeof Number(value) !== 'number') {
@@ -87,25 +109,15 @@ class App extends React.Component {
 
 
   setFormat = ({ target: { value } }) => {
-    this.setState({ format: value});
+    this.setState({ format: value });
   }
 
   updateReport(report) {
-    console.log(report)
-    console.log(Array.isArray(report[1]));
-    const topSwim = report[1].find(entry => entry.type === 'Swim');
-    const topRun = report[1].find(entry => entry.type === 'Run');
-    // const topRide = report[1].find(entry => entry.type === 'Ride');
-    // console.log(topSwim);
-
-    const topActivities = [topSwim, topRun, {}]
-
     this.setState((prevState, props) => {
       return {
-        topActivities: topActivities,
         isLoaded: true,
-        totalEntries: report[0],
-        entries: report[0].filter((entry) => entry.type === 'Run')
+        totalEntries: report,
+        entries: report.filter((entry) => entry.type === 'Run')
       }
     }
     );
@@ -143,27 +155,6 @@ class App extends React.Component {
   }
 
   // This Function is called inside of render so don't set state!
-  renderEntries() {
-    const { entries, currentPage, entriesPerPage, sport, distance, topActivities } = this.state;
-    const indexOfLastEntry = currentPage * entriesPerPage;
-    const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
-    const currentEntries = entries.slice(indexOfFirstEntry, indexOfLastEntry);
-
-    return currentEntries.map((entry, index) => {
-      if (currentPage === 1 && (index >= 0 || index <= 3)) {
-        if (distance === 0) {
-          var currentTopActivity = topActivities.find((topActivity) => topActivity.type === sport);
-          return <li key={index}><Entry currentTopActivity={currentTopActivity} topActivities={topActivities} no={index} sport={sport} entry={entry} format={this.state.format} /></li>
-        } else {
-          return <li key={index}><Entry topActivities={topActivities} no={index} sport={sport} entry={entry} format={this.state.format} /></li>
-        }
-
-      }
-      return <li className='entry' key={index}><Entry sport={sport} entry={entry} format={this.state.format} /></li>
-    });
-  }
-
-  // This Function is called inside of render so don't set state!
   renderEmpty() {
     return (
       <li className='inner-entry'>
@@ -175,7 +166,7 @@ class App extends React.Component {
 
   // This Function is called inside of render so don't set state!
   renderPageNumbers() {
-    const { entries, currentPage, entriesPerPage, sport, distance, topActivities } = this.state;
+    const { entries, currentPage, entriesPerPage, sport, distance } = this.state;
     const pageNumbers = [];
 
     for (let i = 1; i <= Math.ceil(entries.length / entriesPerPage); i++) {
@@ -205,14 +196,45 @@ class App extends React.Component {
 
 
   render() {
-    const { entries, currentPage, entriesPerPage, profile, checked, progressBarProgress, sport, distance, format, invalidEntry, isLoaded } = this.state;
-    const { updateReport, setSport, setDistance, setFormat, updateProgressBar, renderEmpty, renderEntries, renderPageNumbers } = this;
+    const { currentActivity, entries, currentPage, entriesPerPage, profile, checked, progressBarProgress, sport, distance, format, invalidEntry, isLoaded } = this.state;
+    const { updateReport, setSport, setDistance, setFormat, updateProgressBar, renderEmpty, renderPageNumbers } = this;
 
     // https://stackoverflow.com/questions/40232847/how-to-implement-pagination-in-reactjs
     const currentEntries = entries.slice(((currentPage * entriesPerPage) - entriesPerPage), (currentPage * entriesPerPage))
 
+    const renderEntries = currentEntries.map((entry, index) => {
+
+      if (currentPage === 1 && (index >= 0 && index <= 3)) {
+        return <li key={index}><Entry currentActivity={currentActivity} showIndividualEntry={this.showIndividualEntry} no={index} sport={sport} entry={entry} format={format} /></li>
+      } else {
+        return <li className='entry' key={index}><Entry currentActivity={currentActivity} showIndividualEntry={this.showIndividualEntry} sport={sport} entry={entry} format={format} /></li>
+      }
+
+    })
+
+
+    // if (currentPage === 1 && (index >= 0 && index <= 3)) {
+    //   if (distance === 0) {
+    //     var currentTopActivity = topActivities.find((topActivity) => topActivity.type === sport);
+    //     return <li key={index}><Entry showIndividualEntry={this.showIndividualEntry} currentTopActivity={currentTopActivity} topActivities={topActivities} no={index} sport={sport} entry={entry} format={this.state.format} /></li>
+    //   } else {
+    //     return <li key={index}><Entry no={index} showIndividualEntry={this.showIndividualEntry} sport={sport} entry={entry} format={format} /></li>
+    //   }
+
+    // } else if (currentActivity.id === entry.id) {
+    //   console.log('bingo one')
+    //   return
+    //   <li className='entry' key={index}>
+    //     <Entry currentActivity={currentActivity} showIndividualEntry={this.showIndividualEntry} sport={sport} entry={entry} format={this.state.format} />
+    //   </li>
+    // } else {
+    //   return <li className='entry' key={index}><Entry showIndividualEntry={this.showIndividualEntry} sport={sport} entry={entry} format={format} /></li>
+    // }
+
+    // });
+
     return (
-      <div id='body'>
+      <div id='body' >
         <div id='upper-section'>
           <Profile profile={profile} />
           <Buttons setSport={setSport} updateReport={updateReport} sport={sport} checked={checked} updateProgressBar={updateProgressBar} progressBarProgress={progressBarProgress} distance={distance} setDistance={setDistance} setFormat={setFormat} format={format} />
