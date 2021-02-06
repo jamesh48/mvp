@@ -144,7 +144,7 @@ router.get('/getLoggedInUser', (req, res, next) => {
 router.get('/exchange_token', (req, res, next) => {
   const authCodeFromStrava = req.query.code;
   return axios.post(`https://www.strava.com/oauth/token`, {
-    client_id 61039,
+    client_id: 61039,
     client_secret: '6fc05c73bd3bff4203650315ed04e90683b96677',
     code: authCodeFromStrava,
     grant_type: 'authorization_code'
