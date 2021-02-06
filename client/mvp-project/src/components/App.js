@@ -41,14 +41,15 @@ class App extends React.Component {
   };
 
   authorize = (props) => {
-    window.open(`https://www.strava.com/oauth/authorize?client_id=${this.props.settings}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
+    console.log(this.props.settings);
+    window.open(`https://www.strava.com/oauth/authorize?client_id=${this.props.settings.userId}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
   }
 
   getLoggedInUser = (callback) => {
     const config = {
       'method': 'GET',
-      // 'url': 'http://localhost:8000/getLoggedInUser',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+      'url': 'http://localhost:8000/getLoggedInUser',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
     }
 
     return axios(config)
@@ -77,8 +78,8 @@ class App extends React.Component {
 
     const config = {
       'method': 'GET',
-      // url: 'http://127.0.0.1:8000/getResults',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
+      url: 'http://127.0.0.1:8000/getResults',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/getResults',
     }
 
     return axios(config)
@@ -127,8 +128,8 @@ class App extends React.Component {
 
     var config = {
       'method': 'GET',
-      // 'url': 'http://localhost:8000/individualEntry',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/individualEntry',
+      'url': 'http://localhost:8000/individualEntry',
+      // url: 'https://aqueous-fjord-59533.herokuapp.com/individualEntry',
       'contentType': 'application/json',
       params: {
         'entryid': testid
