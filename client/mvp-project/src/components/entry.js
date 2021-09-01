@@ -145,6 +145,7 @@ const Entry = (props) => {
                   : null
         }
         {/* Max Speed Format  */}
+
         {props.format === 'kph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * mps2kph).toFixed(2)} </p>kph</p> :
           props.format === 'mph' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed * 2.237).toFixed(2)}</p> mph</p> :
             props.format === 'mps' ? <p>Max Speed- <p className='speed'>{(props.entry.max_speed).toFixed(2)}</p> mps</p> :

@@ -5,6 +5,7 @@ const app = express();
 const router = express.Router();
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 // const auth = require('./storage.txt')
 const returnStravaResults = require('./getStravaResults').returnStravaResults;
 let port = process.env.PORT;
@@ -19,10 +20,15 @@ const corsOptions = {
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.static(path.resolve('public')))
 app.use('/', router);
 router.use((req, res, next) => {
   console.log(req.method, req.url);
   next();
+})
+
+router.get('/', (req, res) => {
+  res.status(200).end();
 })
 
 router.get('/getResults', (req, res, next) => {
@@ -64,13 +70,6 @@ router.get('/getResults', (req, res, next) => {
     }
   });
 });
-
-
-
-
-router.get('/', (req, res, next) => {
-  res.status(200).end();
-})
 
 // router.get('/getUserStats', (req, res, next) => {
 
@@ -197,14 +196,14 @@ app.listen(port, () => {
 
 // To Manually Get Access Token...
 //First- GET Request
-// https://www.strava.com/oauth/authorize?client_id=61039&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read_all
+// https://www.strava.com/oauth/authorize?client_id=<clientid>&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=activity:read_all
 
 //Get the 'code' param from the queryString
 
 //Second-POST Request
 // https://www.strava.com/oauth/token?
-    // client_id=61039&
-    // client_secret=6fc05c73bd3bff4203650315ed04e90683b96677&
+    // client_id=
+    // client_secret=
     // code=<code param from query string>&
     // grant_type=authorization_code
 

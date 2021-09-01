@@ -7,30 +7,30 @@ import topActivities from './Test\ Data/topActivityTestData';
 
 
 const requestFunctions = {
-  authorize: () => {
-    window.open(`https://www.strava.com/oauth/authorize?client_id=${config.userId}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
-  },
+  // authorize: () => {
+  //   window.open(`https://www.strava.com/oauth/authorize?client_id=${config.userId}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
+  // },
 
-  getLoggedInUser: (callback) => {
-    $.ajax({
-      method: 'GET',
-      // url: 'http://localhost:8000/getLoggedInUser',
-      url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
-      success: (data) => {
-        callback(data);
-      },
-      error: (err) => {
-        if (err.status === 429) {
-          console.log(`Error ${err.status}: ${err.statusText}`);
-          callback(profileTestData);
-        } else {
-          console.log(`Error ${err.status}: ${err.statusText}`);
-          requestFunctions.authorize();
-        }
-      }
-    });
-    // callback(profileTestData);
-  },
+  // getLoggedInUser: (callback) => {
+  //   $.ajax({
+  //     method: 'GET',
+  //     // url: 'http://localhost:8000/getLoggedInUser',
+  //     url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+  //     success: (data) => {
+  //       callback(data);
+  //     },
+  //     error: (err) => {
+  //       if (err.status === 429) {
+  //         console.log(`Error ${err.status}: ${err.statusText}`);
+  //         callback(profileTestData);
+  //       } else {
+  //         console.log(`Error ${err.status}: ${err.statusText}`);
+  //         requestFunctions.authorize();
+  //       }
+  //     }
+  //   });
+  //   // callback(profileTestData);
+  // },
 
   getUserActivities: (updateProgressBar, callback) => {
     const moveProgressBar = setInterval(() => {

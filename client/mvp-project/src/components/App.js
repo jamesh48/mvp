@@ -41,15 +41,14 @@ class App extends React.Component {
   };
 
   authorize = (props) => {
-    console.log(this.props.settings);
-    window.open(`https://www.strava.com/oauth/authorize?client_id=${this.props.settings.userId}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
+    window.open(`https://www.strava.com/oauth/authorize?client_id=${process.env.userId}&response_type=code&redirect_uri=http://localhost:8000/exchange_token&approval_prompt=force&scope=activity:read_all`)
   }
 
   getLoggedInUser = (callback) => {
     const config = {
       'method': 'GET',
       'url': 'http://localhost:8000/getLoggedInUser',
-      // url: 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
+      // 'url': 'https://aqueous-fjord-59533.herokuapp.com/getLoggedInUser',
     }
 
     return axios(config)
@@ -100,8 +99,6 @@ class App extends React.Component {
         }, 400)
       })
   }
-
-
 
   handleClick = ({ target: { id } }) => {
     this.setState({
@@ -224,8 +221,8 @@ class App extends React.Component {
   renderEmpty() {
     return (
       <li className='inner-entry'>
-        <h4 className='entry-title'>~No Entries Found~</h4>
-        <p>But keep up the Good Work Champ!</p>
+        <h4 className='entry-title' id='no-entries-found'>~No Entries Found~</h4>
+        <p id='champ'>But keep up the Good Work Champ!</p>
       </li>
     )
   }

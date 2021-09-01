@@ -168,7 +168,15 @@ body {
   color: ivory;
 }
 
+#no-entries-found {
+  padding-bottom: 0px;
+}
 
+#champ {
+  padding-left: 15px;
+  padding-top: 0px;
+  padding-bottom: 10px;
+}
 
 .ytd-totals {
   background-color: turquoise;
